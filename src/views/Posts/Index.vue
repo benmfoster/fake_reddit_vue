@@ -10,15 +10,15 @@
 
                 Comments {{ post.comments.length }}
 
-                    <button v-bind:class="{ hide: !(user.downvoted_post_ids[post.id] == true) }" v-on:click="setCurrentPost(post)" style="color:red;">
+                    <button v-bind:class="{ hide: !(user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
-                        ↓ {{ post.downvotes.length + post.down }}
+                        ↓ {{ post.total_downvotes }}
 
                     </button>
 
                     <button v-bind:class="{ hide: user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
 
-                        ↓ {{ post.downvotes.length + post.down }}
+                        ↓ {{ post.total_downvotes }}
                         
                     </button>
 
@@ -42,7 +42,6 @@
         data: function() {
             return {
                 posts: [],
-                currentPost: [],
                 user: {},
             };
         },
@@ -57,32 +56,23 @@
             });
         },
         methods: {
-            setCurrentPost: function(post) {
-                this.currentPost = post;
-            },
             removeDownvote: function(post) {
-                for(var i = 0; i < post.downvotes.length; i++) {
-                    if(this.currentPost.downvotes[i].user_id == this.user.id) {
-                        axios.delete("/api/downvotes/" + post.downvotes[i].id).then(response => {
-                                    console.log("Success!", response.data);
-                        });
-                    }
-                }
+                axios.delete("/api/downvotes/" + post.id).then(response => {
+                    console.log("Success!", response.data);
+                });
                 this.user.downvoted_post_ids[post.id] = false;
-                post.down--;            
+                post.total_downvotes--;         
             },
             downvote: function(post) {
-                var formData = new FormData();
-                formData.append("post_id", post.id);
-                axios.post("/api/downvotes", formData).then(response => {
-                    post.downvotes.push(response.data.downvote.downvote);
+                var params = {post_id: post.id};
+                axios.post("/api/downvotes", params).then(response => {
                     console.log("Success!", response.data);
                 }).catch(error => {
                 this.errors = error.response.data.errors;
                 this.status = error.response.status;
                 });
                 this.user.downvoted_post_ids[post.id] = true;
-                post.down++;
+                post.total_downvotes++;
             }		
         }	
     }  
