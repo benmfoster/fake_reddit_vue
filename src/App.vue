@@ -10,7 +10,7 @@
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>
       </ul>
     </div>
-    <router-view/>
+    <router-view :key="$route.path"></router-view>
   </div>
 </template>
 
