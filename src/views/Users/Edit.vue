@@ -18,7 +18,7 @@
 		      <input type="text" class="form-control" id="profile_picture" placeholder="url" v-model="user.profile_picture">
 		    </div>
             <div class="form-group col-md-6">
-		      <label for="profile_picture">Password</label>
+		      <label for="password">Password</label>
 		      <input type="text" class="form-control" id="password" placeholder="password" v-model="user.password">
 		    </div>
 		  </div>

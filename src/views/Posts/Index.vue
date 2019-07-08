@@ -1,22 +1,28 @@
 <template>
     <div class="posts-index">
         <div v-for="post in posts" :key="post.id">
-
-            <h3>{{ post.title }}</h3>
-            <small>{{ post.authored_by }}</small>
-            <p>{{ post.text }}</p>
-            
+            <h3>
+                <router-link v-bind:to="'posts/' + post.id">
+                    {{ post.title }}
+                </router-link>
+            </h3>
+            <small>
+                <router-link v-bind:to="'users/' + post.author_id">
+                    {{ post.authored_by }}
+                </router-link>
+            </small>
+                <p>{{ post.text }}</p>
             <small>
 
                 Comments {{ post.comments.length }}
 
-                    <button v-bind:class="{ hide: !(user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
+                    <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
                         ↓ {{ post.total_downvotes }}
 
                     </button>
 
-                    <button v-bind:class="{ hide: user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
+                    <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
 
                         ↓ {{ post.total_downvotes }}
                         
@@ -42,17 +48,15 @@
         data: function() {
             return {
                 posts: [],
-                user: {},
+                current_user: {}
             };
         },
         created: function() {
-            axios.get("/api/users/" + this.$route.params.id).then(response => {
-                this.user = response.data;
-                console.log(this.user);
+            axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
+                this.current_user = response.data;
             });
             axios.get("/api/posts").then(response => {
                 this.posts = response.data;
-                console.log(this.posts);
             });
         },
         methods: {
@@ -60,7 +64,7 @@
                 axios.delete("/api/downvotes/" + post.id).then(response => {
                     console.log("Success!", response.data);
                 });
-                this.user.downvoted_post_ids[post.id] = false;
+                this.current_user.downvoted_post_ids[post.id] = false;
                 post.total_downvotes--;         
             },
             downvote: function(post) {
@@ -71,7 +75,7 @@
                 this.errors = error.response.data.errors;
                 this.status = error.response.status;
                 });
-                this.user.downvoted_post_ids[post.id] = true;
+                this.current_user.downvoted_post_ids[post.id] = true;
                 post.total_downvotes++;
             }		
         }	

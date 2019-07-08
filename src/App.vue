@@ -4,7 +4,7 @@
       <h1>Fake Reddit</h1>
       <ul>
         <li><router-link to="/">Home</router-link></li>
-        <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + user.id">My Profile</router-link></li>
+        <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + current_user.id">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>
@@ -41,13 +41,12 @@ import axios from 'axios';
 export default {
   data: function() {
     return {
-      user: {}
+      current_user: {}
     }
   },
   created: function() {
-    axios.get("/api/users/" + this.$route.params.id).then(response => {
-      this.user = response.data;
-      console.log(this.user);
+    axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
+      this.current_user = response.data;
     });
   },
   methods: {
