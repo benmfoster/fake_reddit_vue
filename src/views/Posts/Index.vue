@@ -3,7 +3,7 @@
         <div v-for="post in posts" :key="post.id">
             <h3>
                 <router-link v-bind:to="'posts/' + post.id">
-                    {{ post.title }}
+                    {{ post.title }} .
                 </router-link>
             </h3>
             <small>
@@ -14,7 +14,7 @@
                 <p>{{ post.text }}</p>
             <small>
 
-                Comments {{ post.comments.length }}
+                <router-link v-bind:to="'posts/' + post.id">Comments {{ post.comments.length }} </router-link>
 
                     <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 

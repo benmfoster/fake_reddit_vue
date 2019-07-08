@@ -9,7 +9,9 @@
           <p>{{ post.last_edited }}</p>
           <small>
 
-                Comments {{ post.comments.length }}
+                <router-link v-bind:to="'../posts/' + post.id">
+                  Comments {{ post.comments.length }}
+                </router-link>
 
                     <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
@@ -26,9 +28,11 @@
             </small>
 
           <p>{{ post.text }}</p>
-          <div v-for="comment in post.comments">          
+          <div v-for="comment in post.comments"> 
+            <router-link v-bind:to="'/users/' + comment.author_id">
+              <p>{{ comment.authored_by }} </p>
+            </router-link>         
             <p>{{ comment.text }}</p>
-            <router-link v-bind:to="'/users/' + comment.author_id"><p>{{ comment.authored_by }} </p></router-link>
             <p>{{ comment.last_edited }} </p>
           </div>
         </div>

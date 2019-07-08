@@ -2,13 +2,13 @@
   <div class="posts-show">
 
     <h3>{{ post.title }}</h3>
-            <p>{{ post.authored_by }}</p>
+            <router-link v-bind:to="'../users/' + post.author_id"><p>{{ post.authored_by }}</p></router-link>
             <img v-bind:src="post.image_url" />
             <p>{{ post.text }}</p>
             
             <small>
 
-                Comments {{ post.comments.length }}
+                <router-link v-bind:to="post.id">Comments {{ post.comments.length }}</router-link>
 
                     <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
@@ -32,7 +32,7 @@
 
     <h4>Comments</h4>
     <div v-for="comment in post.comments">
-      <h5>{{ comment.authored_by }}</h5>
+      <h5><router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link></h5>
       <p>{{ comment.text }}</p>
       <div v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)">
         <small>Delete</small>

@@ -4,6 +4,7 @@
       <h1>Fake Reddit</h1>
       <ul>
         <li><router-link to="/">Home</router-link></li>
+        <li><router-link v-if="isLoggedIn()" to='/posts/new'>New Post</router-link></li>
         <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + current_user.id">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
