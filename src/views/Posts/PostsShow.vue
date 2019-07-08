@@ -29,15 +29,16 @@
         <button class="btn btn-warning">Edit Post</button>
       </router-link>
     </div>
-
-    <h4>Comments</h4>
-    <div v-for="comment in post.comments">
-      <h5><router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link></h5>
-      <p>{{ comment.text }}</p>
-      <div v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)">
-        <small>Delete</small>
+    
+    
+      <h4>Comments</h4>
+      <div v-for="comment in post.comments">
+        <h5><router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link></h5>
+        <p>{{ comment.text }}</p>
+        <div v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)">
+          <small>Delete</small>
+        </div>
       </div>
-    </div>
 
     <div v-bind:class="{ hide: isSubmitted == false }">
       <h5>{{ current_user.name }}</h5>
@@ -129,7 +130,7 @@ export default {
         } else {
           this.post.comments.splice(this.post.comments.indexOf(comment), 1);
         }
-    },
+    }
   }
 };
 </script>

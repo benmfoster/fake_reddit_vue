@@ -28,15 +28,18 @@
             </small>
 
           <p>{{ post.text }}</p>
-          <div v-for="comment in post.comments"> 
-            <router-link v-bind:to="'/users/' + comment.author_id">
-              <p>{{ comment.authored_by }} </p>
-            </router-link>         
-            <p>{{ comment.text }}</p>
-            <p>{{ comment.last_edited }} </p>
+          <div v-on:click="toggleComments()"><span v-if="showComments == false">Show</span><span v-if="showComments == true">Hide</span> Comments</div>
+          <div v-if="showComments == true"> 
+            <div v-for="comment in post.comments">          
+              <router-link v-bind:to="'/users/' + comment.author_id">
+                <p>{{ comment.authored_by }} </p>
+              </router-link>         
+              <p>{{ comment.text }}</p>
+              <p>{{ comment.last_edited }} </p>
+            </div>
           </div>
-        </div>
     </div>
+  </div>
 </template>
 
 <style>
@@ -52,7 +55,8 @@ export default {
   data: function() {
     return {
       user: {},
-      current_user: {} 
+      current_user: {},
+      showComments: false 
     };
   },
   created: function() {
@@ -82,6 +86,13 @@ export default {
         });
         this.current_user.downvoted_post_ids[post.id] = true;
         post.total_downvotes++;
+    },
+    toggleComments: function() {
+      if (this.showComments == true) {
+        this.showComments = false;
+      } else {
+        this.showComments = true;
+      }
     }	
   }
 };
