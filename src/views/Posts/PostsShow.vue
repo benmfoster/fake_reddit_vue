@@ -31,7 +31,7 @@
     </div>
     
     
-      <h4>Comments</h4>
+      <div v-if="toggleCommentsHeader()"><h4>Comments</h4></div>
       <div v-for="comment in post.comments">
         <h5><router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link></h5>
         <p>{{ comment.text }}</p>
@@ -130,6 +130,15 @@ export default {
         } else {
           this.post.comments.splice(this.post.comments.indexOf(comment), 1);
         }
+    },
+    toggleCommentsHeader: function() {
+      if (this.post.comments.length > 0) {
+        return true
+      } else if (this.isSubmitted == true) {
+        return true
+      } else {
+        return false
+      }
     }
   }
 };
