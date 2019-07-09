@@ -1,38 +1,30 @@
 <template>
 	<div class="posts-edit">
-		
-		<h1 class="text-center">Edit Post</h1>
+				<div class="post-entry">
+				<div class="container">
+				<h1 class="text-center">Edit Post</h1>
 
-		<ul>
-		  <li v-for="error in errors">{{ error }}</li>
-		</ul>
+				<ul>
+				<li v-for="error in errors">{{ error }}</li>
+				</ul>
 
-		<form v-on:submit.prevent="submit()">
-		  <div class="form-row">
-		    <div class="form-group col-md-6">
-		      <label for="title">Title</label>
-		      <input type="text" class="form-control" id="title" placeholder="title" v-model="post.title">
-		    </div>
-		    <div class="form-group col-md-6">
-		      <label for="text">Body</label>
-		      <input type="text" class="form-control" id="text" placeholder="body text" v-model="post.text">
-		    </div>
-            <div class="form-group col-md-6">
-		      <label for="image_url">Image</label>
-		      <input type="text" class="form-control" id="image_url" placeholder="url" v-model="post.image_url">
-		    </div>
-		  </div>
-		  <div class="form-group col-md-12 text-center">
-		  	<button type="submit" class="btn btn-primary">Update Post</button>
-		  </div>		  
-		</form>
-
-		<div class="text-center">
+				<form v-on:submit.prevent="submit()">
+			<div class="form-group">
+				<input type="text" class="input-lg form-control" placeholder="Title:" v-model="post.title">
+			</div>
+			<div class="form-group">
+				<textarea type="text" class="input-lg form-control" rows="10" placeholder="Text:" v-model="post.text"></textarea>
+			</div>
+			<div class="form-group">
+				<input type="text" class="input-lg form-control" placeholder="Image Url:" v-model="post.image_url">
+			</div>
+			<button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Update</button>
 			<router-link to="/../">
-				<button class="btn btn-danger" v-on:click="destroyPost()">Delete Post</button>
-			</router-link>
-		</div>
-
+					<button class="btn btn-block btn-square btn-danger btn-lg" v-on:click="destroyPost()">Delete Post</button>
+					</router-link>
+			</form>
+			</div>
+			</div>
 	</div>
 </template>
 
@@ -55,7 +47,7 @@ export default {
   		var params = {
               title: this.post.title,
               text: this.post.text,
-              image_url: this.image_url
+              image_url: this.post.image_url
   		};
   		axios.patch("/api/posts/" + this.post.id, params).then(response => {
   			console.log("Success!", response.data);

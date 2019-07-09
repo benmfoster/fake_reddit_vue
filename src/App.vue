@@ -1,41 +1,60 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <h1>Fake Reddit</h1>
-      <ul>
-        <li><router-link to="/">Home</router-link></li>
+    <div class="site-main">
+      <!-- header -->
+    <div class="header">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-sm-8">
+            <h1 class="site-title"><router-link to="/">Fake Reddit</router-link><span>.</span></a></h1>
+            <p class="site-description">Misanthropes pile-driving the internet.</p>
+          </div><!-- .col-sm-6 -->
+
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </div><!-- .header -->
+    <!-- navbar -->
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#amalia-navbar-collapse" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button><!-- .navbar-toggle -->
+        </div><!-- .navbar-header -->
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="amalia-navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><router-link to="/">Home</router-link></li>
         <li><router-link v-if="isLoggedIn()" to='/posts/new'>New Post</router-link></li>
         <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + current_user.id">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>
-      </ul>
-    </div>
+          </ul><!-- .navbar-nav -->
+        </div><!-- .navbar-collapse -->
+      </div><!-- .container -->
+    </nav><!-- .navbar -->
     <router-view :key="$route.path"></router-view>
+    <div class="footer" style="background-image: url('img/amalia-image-footer.jpg');">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-md-4">
+            <h3>Fake Reddit<span>.</span></h3>
+          </div><!-- .col-md-4 -->
+
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </div><!-- .footer -->
+  </div>
   </div>
 </template>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
 
 <script>
 import axios from 'axios';

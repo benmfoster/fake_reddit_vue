@@ -1,17 +1,31 @@
 <template>
     <div class="users-show">
-        <h2>{{ user.name }}</h2>
-        <img v-bind:src="user.profile_picture" alt="" />
-        <div v-if="user.id == current_user.id"><router-link v-bind:to="'/users/' + current_user.id + '/edit'"><p>Edit Profile</p></router-link></div>
-        <h3>Posts</h3>
-        <div v-for="post in user.posts">
-          <h4><router-link v-bind:to="'../posts/' + post.id">{{ post.title }}</router-link></h4>
-          <p>{{ post.last_edited }}</p>
-          <small>
 
-                <router-link v-bind:to="'../posts/' + post.id">
-                  Comments {{ post.comments.length }}
-                </router-link>
+      
+        <!-- post-entry -->
+      <div class="post-entry">
+        <div class="container">
+          <div class="row">
+
+            <!-- content-area -->
+            <div class="col-md-8">
+              <h2>Recent Posts</h2>
+              <div v-for="post in user.posts" :key="post.id">
+              <article>
+                <div class="news-container">
+                  
+                  <h1 class="news-title"><router-link v-bind:to="'../posts/' + post.id">{{ post.title }}</router-link></h1>
+                  <span class="news-date">{{ post.last_edited }}</span>
+                  <div class="news-entry">
+                    <p>{{ post.text }}</p>
+                  </div><!-- .news-entry -->
+                  <div class="news-footer">
+
+                    <div class="row">
+              
+                      <div class="col-md-8">
+                        <div class="news-footer-share">
+                          <router-link v-bind:to="'../posts/' + post.id">Comments {{ post.comments.length }}</router-link>
 
                     <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
@@ -24,22 +38,57 @@
                         ↓ {{ post.total_downvotes }}
                         
                     </button>
+                   
+                    <router-link v-bind:to="'../posts/' + post.id + '/edit'">
+                      <button class="btn btn-warning" v-if="current_user.name == post.authored_by">Edit Post</button>
+                    </router-link>
+                  
+                        </div>
+                      </div><!-- .col-md-6 -->
+                    </div><!-- .row -->
 
-            </small>
+                  </div><!-- .news-footer -->
 
-          <p>{{ post.text }}</p>
-          <div v-on:click="toggleComments()"><span v-if="showComments == false">Show</span><span v-if="showComments == true">Hide</span> Comments</div>
-          <div v-if="showComments == true"> 
-            <div v-for="comment in post.comments">          
-              <router-link v-bind:to="'/users/' + comment.author_id">
-                <p>{{ comment.authored_by }} </p>
-              </router-link>         
-              <p>{{ comment.text }}</p>
-              <p>{{ comment.last_edited }} </p>
-            </div>
-          </div>
+                  <div class="news-author-bio">
+                    <div class="author-avatar">
+                      <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt=""></router-link>
+                    </div><!-- .author-avatar -->
+                    <div class="author-info">
+                      <h4><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
+                       <small>posted this.</small></h4>
+              
+                      
+                    </div><!-- .author-info -->
+                  </div><!-- .news-author-bio -->
+
+                  
+
+        
+
+                </div><!-- .news-container -->
+              </article>
+      </div>
+      </div>
+      
+      <!-- sidebar -->
+       <div class="col-md-4">
+
+               <section class="widget widget_about">
+                 <div class="about-photo">
+                   <img v-bind:src="user.profile_picture" alt="" />
+                 </div><!-- .about-photo -->
+                 <div class="about-author">
+                   <h3>{{ user.name }}</h3>
+                 </div><!-- .about-author -->
+               </section><!-- .widget_about -->
+
+             </div><!-- .col-md-4 -->
+
+           </div><!-- .row -->
+         </div><!-- .container -->
+       </div><!-- .post-entry -->
     </div>
-  </div>
+
 </template>
 
 <style>

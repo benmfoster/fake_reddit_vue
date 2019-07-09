@@ -1,14 +1,36 @@
 <template>
   <div class="posts-show">
 
-    <h3>{{ post.title }}</h3>
-            <router-link v-bind:to="'../users/' + post.author_id"><p>{{ post.authored_by }}</p></router-link>
-            <img v-bind:src="post.image_url" />
-            <p>{{ post.text }}</p>
-            
-            <small>
+    <!-- post-entry -->
+      <div class="post-entry">
+        <div class="container">
+          <div class="row">
 
-                <router-link v-bind:to="post.id">Comments {{ post.comments.length }}</router-link>
+            <!-- content-area -->
+            <div class="col-md-8">
+              <article>
+                <div class="news-container">
+                  
+                  <h1 class="news-title">{{ post.title }}</h1>
+                  <span class="news-date">{{ post.date }}</span>
+                  <div class="author-info">
+                      <small>posted by <router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link></small>
+              
+                      
+                    </div><!-- .author-info -->
+                  <div class="news-image">
+                    <img v-bind:src="post.image_url" />
+                  </div><!-- .news-image -->
+                  <div class="news-entry">
+                    <p>{{ post.text }}</p>
+                  </div><!-- .news-entry -->
+                  <div class="news-footer">
+
+                    <div class="row">
+              
+                      <div class="col-md-8">
+                        <div class="news-footer-share">
+                          <router-link v-bind:to="post.id">Comments {{ post.comments.length }}</router-link>
 
                     <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
 
@@ -21,38 +43,105 @@
                         ↓ {{ post.total_downvotes }}
                         
                     </button>
+                   
+                    <router-link v-bind:to="post.id + '/edit'">
+                      <button class="btn btn-warning" v-if="current_user.name == post.authored_by">Edit Post</button>
+                    </router-link>
+                  
+                        </div>
+                      </div><!-- .col-md-6 -->
+                    </div><!-- .row -->
 
-            </small>
+                  </div><!-- .news-footer -->
 
-    <div v-if="current_user.name == post.authored_by">
-      <router-link v-bind:to="post.id + '/edit'">
-        <button class="btn btn-warning">Edit Post</button>
-      </router-link>
-    </div>
+                  <div class="news-author-bio">
+                    <div class="author-avatar">
+                      <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt=""></router-link>
+                    </div><!-- .author-avatar -->
+                    <div class="author-info">
+                      <h4><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
+                       <small>posted this.</small></h4>
+              
+                      
+                    </div><!-- .author-info -->
+                  </div><!-- .news-author-bio -->
+
+                  
+
+        
+
+                </div><!-- .news-container -->
+              </article>
+
+              <div id="comments" class="comments-area">
+                <h2 class="comments-title" v-if="toggleCommentsHeader()">
+                  {{ post.comments.length }} comments
+                </h2><!-- .comments-title -->
+
+                <ol class="comment-list" v-for="comment in post.comments">
+                  <li>
+                    <article class="comment-body">
+                      <footer class="comment-meta">
+                        <div class="comment-author">
+                          <img v-bind:src="comment.author_image" class="avatar" alt=""> 
+                          <router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link>
+                        </div><!-- .comment-author -->
+                        <div class="comment-metadata">
+                          <time>{{ comment.last_edited }}</time>
+                        </div><!-- .comment-metadata -->
+                      </footer><!-- .comment-meta -->
+                      <div class="comment-content">
+                        {{ comment.text }}
+                        <small v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
+                      </div><!-- .comment-content -->                      
+                    </article><!-- .comment-body -->
+                  </li>
+                </ol>
+
+                <ol class="comment-list" v-bind:class="{ hide: isSubmitted == false }">
+                  <li>
+                    <article class="comment-body">
+                      <footer class="comment-meta">
+                        <div class="comment-author">
+                          <img v-bind:src="current_user.profile_picture_url" class="avatar" alt=""> 
+                          <router-link v-bind:to="'../users/' + current_user.id">{{ current_user.name }}</router-link>
+                        </div><!-- .comment-author -->
+                        <div class="comment-metadata">
+                        </div><!-- .comment-metadata -->
+                      </footer><!-- .comment-meta -->
+                      <div class="comment-content">
+                        {{ newComment }}
+                        <small v-on:click="deleteComment(newCommentId)" class="underline-on-hover">Delete</small>
+                      </div><!-- .comment-content -->                      
+                    </article><!-- .comment-body -->
+                  </li>
+                </ol>
+
+                <div id="respond" class="comment-respond">
+                  <h3 class="comment-reply-title">Leave a Reply <small></small></h3>
+
+                  <form>
+                    <div class="form-group">
+                      <form v-on:submit.prevent="submit()">
+                        <textarea class="form-control" rows="5" placeholder="Message: "></textarea>
+                        <button class="btn btn-secondary btn-lg btn-block btn-square btn-bordered" type="submit">Submit</button>
+                      </form>
+                    </div>
+                  </form>
+                </div><!-- #respond -->
+              </div><!-- #comments -->
+
+            </div><!-- .col-md-8 -->
+
+            
+
+            </div><!-- .col-md-4 -->
+
+          </div><!-- .row -->
+        </div><!-- .container -->
+      </div><!-- .post-entry -->
+
     
-    
-      <div v-if="toggleCommentsHeader()"><h4>Comments</h4></div>
-      <div v-for="comment in post.comments">
-        <h5><router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link></h5>
-        <p>{{ comment.text }}</p>
-        <div v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)">
-          <small>Delete</small>
-        </div>
-      </div>
-
-    <div v-bind:class="{ hide: isSubmitted == false }">
-      <h5>{{ current_user.name }}</h5>
-      <p>{{ newComment }}</p>
-      <div v-on:click="deleteComment(newCommentId)">
-        <small>Delete</small>
-      </div>
-    </div>
-
-    <h4>New Comment</h4>
-    <form v-on:submit.prevent="submit()">
-      <input type="text" v-model="newComment"/>
-      <button type="submit">Submit</button>
-    </form>
     
   </div>
 </template>
@@ -62,6 +151,9 @@
         display: none;
         visibility: hidden;
     }
+.underline-on-hover:hover {
+    text-decoration: underline;
+}
 </style>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
   <div class="posts-new">
+    <div class="post-entry">
+				<div class="container">
 
     <h1 class="text-center">New Post</h1>
 
@@ -8,6 +10,19 @@
     </ul>
 
     <form v-on:submit.prevent="submit()">
+      <div class="form-group">
+        <input type="text" class="input-lg form-control" placeholder="Title:" v-model="newPostTitle">
+      </div>
+      <div class="form-group">
+       <textarea type="text" class="input-lg form-control" rows="10" placeholder="Text:" v-model="newPostText"></textarea>
+      </div>
+      <div class="form-group">
+        <input type="text" class="input-lg form-control" placeholder="Image Url:" v-model="newPostImage">
+      </div>
+      <button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Submit</button>
+    </form>
+
+    <!-- <form v-on:submit.prevent="submit()">
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="title">Title</label>
@@ -25,8 +40,9 @@
       <div class="form-group col-md-12 text-center">
         <button type="submit" class="btn btn-primary">Create</button>
       </div>
-    </form>
-    
+    </form> -->
+      </div>
+        </div>
   </div>
 </template>
 
