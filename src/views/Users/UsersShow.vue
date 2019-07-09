@@ -17,7 +17,7 @@
                   <h1 class="news-title"><router-link v-bind:to="'../posts/' + post.id">{{ post.title }}</router-link></h1>
                   <span class="news-date">{{ post.last_edited }}</span>
                   <div class="news-entry">
-                    <p>{{ post.text }}</p>
+                    <p>{{ shortener(post.text) }}</p>
                   </div><!-- .news-entry -->
                   <div class="news-footer">
 
@@ -49,18 +49,6 @@
 
                   </div><!-- .news-footer -->
 
-                  <div class="news-author-bio">
-                    <div class="author-avatar">
-                      <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt=""></router-link>
-                    </div><!-- .author-avatar -->
-                    <div class="author-info">
-                      <h4><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
-                       <small>posted this.</small></h4>
-              
-                      
-                    </div><!-- .author-info -->
-                  </div><!-- .news-author-bio -->
-
                   
 
         
@@ -80,6 +68,7 @@
                  <div class="about-author">
                    <h3>{{ user.name }}</h3>
                  </div><!-- .about-author -->
+                 <router-link v-bind:to="user.id + '/edit'"><button v-if="current_user.id == user.id" class="btn btn-light">Edit Profile</button></router-link>
                </section><!-- .widget_about -->
 
              </div><!-- .col-md-4 -->
@@ -142,7 +131,11 @@ export default {
       } else {
         this.showComments = true;
       }
+    },
+      shortener: function(string)	{
+         return string.substring(0,500)+"[...]";
+      }
     }	
   }
-};
+
 </script>
