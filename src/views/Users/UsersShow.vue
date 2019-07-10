@@ -9,7 +9,7 @@
 
             <!-- content-area -->
             <div class="col-md-8">
-              <h2>Recent Posts</h2>
+              <h3 style="text-align:center;">Recent Posts</h3>
               <div v-for="post in user.posts" :key="post.id">
               <article>
                 <div class="news-container">
@@ -20,39 +20,12 @@
                     <p>{{ shortener(post.text) }}</p>
                   </div><!-- .news-entry -->
                   <div class="news-footer">
-
-                    <div class="row">
-              
-                      <div class="col-md-8">
-                        <div class="news-footer-share">
-                          <router-link v-bind:to="'../posts/' + post.id">Comments {{ post.comments.length }}</router-link>
-
-                    <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
-
-                        ↓ {{ post.total_downvotes }}
-
-                    </button>
-
-                    <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
-
-                        ↓ {{ post.total_downvotes }}
-                        
-                    </button>
                    
-                    <router-link v-bind:to="'../posts/' + post.id + '/edit'">
-                      <button class="btn btn-warning" v-if="current_user.name == post.authored_by">Edit Post</button>
-                    </router-link>
-                  
-                        </div>
-                      </div><!-- .col-md-6 -->
-                    </div><!-- .row -->
-
+                      <i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + post.id"> Comments {{ post.comments.length }} </router-link>
+                      <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:spanck="removeDownvote(post)" style="color:red; margin-left: 10px;">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
+                      <span v-else><button style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
+                    
                   </div><!-- .news-footer -->
-
-                  
-
-        
-
                 </div><!-- .news-container -->
               </article>
       </div>
@@ -132,9 +105,16 @@ export default {
         this.showComments = true;
       }
     },
-      shortener: function(string)	{
-         return string.substring(0,500)+"[...]";
-      }
+    shortener: function(string)	{
+        return string.substring(0,500)+" [...]";
+    },
+    isLoggedIn: function() {
+      if (localStorage.getItem('jwt')) {
+        return true;
+      } else {
+        return false;
+      }	
+    }	
     }	
   }
 

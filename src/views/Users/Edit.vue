@@ -2,6 +2,10 @@
 	<div class="users-edit">
 		<div class="post-entry">
         <div class="container">
+			<div class="row">
+
+            <!-- content-area -->
+            <div class="col-md-8">
 		
 		<h1>Edit Profile</h1>
 
@@ -10,9 +14,9 @@
 		</ul>
 
 		<section class="widget widget_about">
-<div class="about-photo">
-                   <img v-bind:src="user.profile_picture" alt="" />
-                 </div>
+			<div class="news-image">
+            	<img v-bind:src="user.profile_picture" alt="" />
+            </div>
 		</section>
 
 
@@ -37,7 +41,7 @@
 		  
 		</form>
 
-	</div></div></div>
+	</div></div></div></div></div>
 </template>
 
 <script>

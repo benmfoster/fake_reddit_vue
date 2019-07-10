@@ -2,6 +2,10 @@
   <div class="posts-new">
     <div class="post-entry">
 				<div class="container">
+          <div class="row">
+
+            <!-- content-area -->
+            <div class="col-md-8">
 
     <h1 class="text-center">New Post</h1>
 
@@ -22,27 +26,9 @@
       <button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Submit</button>
     </form>
 
-    <!-- <form v-on:submit.prevent="submit()">
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <label for="title">Title</label>
-          <input type="text" class="form-control" placeholder="title" v-model="newPostTitle">
-        </div>
-        <div class="form-group col-md-6">
-          <label for="text">Text</label>
-          <input type="text" class="form-control" id="text" placeholder="text" v-model="newPostText">
-        </div>
+    
       </div>
-      <div class="form-group col-md-12">
-        <label for="image_url">Image</label>
-        <input type="text" class="form-control" placeholder="url" v-model="newPostImage">
-      </div>
-      <div class="form-group col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Create</button>
-      </div>
-    </form> -->
-      </div>
-        </div>
+        </div></div></div>
   </div>
 </template>
 

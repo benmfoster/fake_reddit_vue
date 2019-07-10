@@ -18,16 +18,18 @@
                   <article class="post">
                     <div class="news-container">
                       <span class="news-category"><router-link v-bind:to="'users/' + mostHatedPost.author_id">{{ mostHatedPost.authored_by }}</router-link></span>
-                      <h1 class="news-title"><router-link v-bind:to="'posts/' + mostHatedPost.id">Most Hated: {{ mostHatedPost.title }}</router-link></h1>
+                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><h2>Most Hated:</h2><h1 class="news-title">{{ mostHatedPost.title }}</h1></router-link>
                       <span class="news-date">{{ mostHatedPost.date }}</span>
                       <div class="news-entry">
                         <p>{{ shortener(mostHatedPost.text) }}</p>
                       </div><!-- .news-entry -->
                       <div class="news-footer">
-                        <ul>
-                          <li><i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + mostHatedPost.id">Comments {{ mostHatedPost.comments.length }} </router-link></li>
-                          <li><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="color:red;">↓ {{ mostHatedPost.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)">↓ {{ mostHatedPost.total_downvotes }}</button></li>
-                        </ul>
+                        
+                          <i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + mostHatedPost.id"> Comments {{ mostHatedPost.comments.length }} </router-link>
+
+                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="color:red; margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button></span>
+                          <span v-else><button style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button></span>
+                        
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
                   </article><!-- article -->
@@ -49,8 +51,9 @@
                       </div><!-- .news-entry -->
                       <div class="news-footer">
                         <ul>
-                          <li><i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + post.id">Comments {{ post.comments.length }} </router-link></li>
-                          <li><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">↓ {{ post.total_downvotes }}</button></li>
+                          <span><i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + post.id"> Comments {{ post.comments.length }} </router-link></span>
+                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red; margin-left: 10px;">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
+                          <span v-if="!isLoggedIn()" style="margin-left: 10px;"><button>↓ {{ post.total_downvotes }}</button></span>
                         </ul>
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
@@ -114,7 +117,7 @@
                 post.total_downvotes++;
             },
             shortener: function(string)	{
-                return string.substring(0,500)+"[...]";
+                return string.substring(0,500)+" [...]";
             },
             mostHated: function(posts) {
               var mostHated = this.posts[0];
@@ -123,9 +126,18 @@
                   mostHated = this.posts[i];
                 }
               }
-              console.log(mostHated);
+              localStorage.setItem("mostHated", mostHated);
               return mostHated;
+
+            },
+            isLoggedIn: function() {
+              if (localStorage.getItem('jwt')) {
+                return true;
+              } else {
+                return false;
+              }	
             }	
-        }	
+        }
+
     }  
 </script>

@@ -11,7 +11,7 @@
               <article>
                 <div class="news-container">
                   
-                  <h1 class="news-title">{{ post.title }}</h1>
+                  <h2 v-if="isMostHated()">Most Hated:</h2><h1 class="news-title">{{ post.title }}</h1>
                   <span class="news-date">{{ post.date }}</span>
                   <div class="author-info">
                       <small>posted by <router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link></small>
@@ -24,35 +24,37 @@
                   <div class="news-entry">
                     <p>{{ post.text }}</p>
                   </div><!-- .news-entry -->
-                  <div class="news-footer">
+                  
+
 
                     <div class="row">
-              
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <div class="news-footer-share">
+                          
                           <router-link v-bind:to="post.id">Comments {{ post.comments.length }}</router-link>
+                          <span v-if="isLoggedIn()">
+                            <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">↓ {{ post.total_downvotes }}</button>
+                            <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">↓ {{ post.total_downvotes }}</button>
+                          </span>
 
-                    <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
+                          <span v-else>
+                            <button>↓ {{ post.total_downvotes }}</button>
+                          </span>
 
-                        ↓ {{ post.total_downvotes }}
-
-                    </button>
-
-                    <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
-
-                        ↓ {{ post.total_downvotes }}
-                        
-                    </button>
-                   
-                    <router-link v-bind:to="post.id + '/edit'">
-                      <button class="btn btn-warning" v-if="current_user.name == post.authored_by">Edit Post</button>
-                    </router-link>
-                  
+                          <router-link v-bind:to="post.id + '/edit'">
+                            <button class="btn btn-warning" v-if="isLoggedIn() && current_user.name == post.authored_by">Edit Post</button>
+                          </router-link>      
                         </div>
-                      </div><!-- .col-md-6 -->
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                      </div><!-- .col-md-6 -->    
                     </div><!-- .row -->
 
                   </div><!-- .news-footer -->
+                  
+                  
 
                   <div class="news-author-bio">
                     <div class="author-avatar">
@@ -71,9 +73,15 @@
         
 
                 </div><!-- .news-container -->
+
               </article>
 
               <div id="comments" class="comments-area">
+                <div class="row">
+
+            <!-- content-area -->
+            <div class="col-md-8">
+                
                 <h2 class="comments-title" v-if="toggleCommentsHeader()">
                   {{ post.comments.length }} comments
                 </h2><!-- .comments-title -->
@@ -117,7 +125,7 @@
                   </li>
                 </ol>
 
-                <div id="respond" class="comment-respond">
+                <div id="respond" class="comment-respond" v-if="isLoggedIn()">
                   <h3 class="comment-reply-title">Leave a Reply <small></small></h3>
 
                   <form>
@@ -129,6 +137,7 @@
                     </div>
                   </form>
                 </div><!-- #respond -->
+                </div></div>
               </div><!-- #comments -->
 
             </div><!-- .col-md-8 -->
@@ -231,7 +240,21 @@ export default {
       } else {
         return false
       }
-    }
+    },
+    isLoggedIn: function() {
+      if (localStorage.getItem('jwt')) {
+        return true;
+      } else {
+        return false;
+      }	
+    },
+    isMostHated: function() {
+      if (localStorage.getItem('mostHated') == this.post) {
+        return true;
+      } else {
+        return false;
+      }
+    }	
   }
 };
 </script>
