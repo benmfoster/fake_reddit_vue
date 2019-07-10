@@ -1,6 +1,5 @@
-    <template>
     <!-- site-main -->
-    <div class="site-main posts-show">     
+    <div class="site-main">     
 
       <!-- post-entry -->
       <div class="post-entry">
@@ -12,7 +11,7 @@
               <article>
                 <div class="news-container">
                   
-                    <span v-if="isMostHated(post)"><h2>Most Hated:</h2></span><h1 class="news-title">{{ post.title }}</h1>
+                    <h2 v-if="isMostHated()">Most Hated:</h2><h1 class="news-title">{{ post.title }}</h1>
                     <span class="news-date">{{ post.date }}</span>
                     <div class="author-info">
                         <small>posted by <router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link></small>
@@ -44,15 +43,14 @@
                             <span v-if="isLoggedIn()">
                               <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">↓ {{ post.total_downvotes }}</button>
                               <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">↓ {{ post.total_downvotes }}</button>
-                            </span>
-                            <span v-else>
-                              <button>↓ {{ post.total_downvotes }}</button>
-                            </span>
+                              <span v-else>
+                                <button>↓ {{ post.total_downvotes }}</button>
+                              </span>
     
                               <router-link v-bind:to="post.id + '/edit'">
                                 <button class="btn btn-warning" v-if="isLoggedIn() && current_user.name == post.authored_by">Edit Post</button>
                               </router-link>    
-                            
+                            </span>
   
                         </div>
                       </div><!-- .col-md-6 -->
@@ -62,7 +60,7 @@
 
                   <div class="news-author-bio">
                     <div class="author-avatar">
-                        <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt="" /></router-link>
+                        <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt=""></router-link>
                     </div><!-- .author-avatar -->
                     <div class="author-info">
                         <h4><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
@@ -82,12 +80,12 @@
                     {{ post.comments.length }} comments
                 </h2><!-- .comments-title -->
 
-                <ol class="comment-list" v-for="comment in post.comments">
+                <ol class="comment-list" v-for="comment in post.comments"></ol>>
                   <li>
                     <article class="comment-body">
                       <footer class="comment-meta">
                         <div class="comment-author">
-                          <img v-bind:src="comment.author_image" class="avatar" alt="" /> 
+                          <img v-bind:src="comment.author_image" class="avatar" alt=""> 
                           <router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link>
                         </div><!-- .comment-author -->
                         <div class="comment-metadata">
@@ -96,7 +94,7 @@
                       </footer><!-- .comment-meta -->
                       <div class="comment-content">
                         {{ comment.text }}
-                        <small v-if="isLoggedIn() && comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
+                        <small v-if="comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
                       </div><!-- .comment-content -->
                     </article><!-- .comment-body -->
 
@@ -142,20 +140,19 @@
       </div><!-- .post-entry -->  
 
     </div><!-- .site-main -->
-</template>
 
-<style>
-  .hide {
-          display: none;
-          visibility: hidden;
-      }
-  .underline-on-hover:hover {
-      text-decoration: underline;
-  }
-</style>
+    <style>
+        .hide {
+                display: none;
+                visibility: hidden;
+            }
+        .underline-on-hover:hover {
+            text-decoration: underline;
+        }
+        </style>
         
-<script>
-    import axios from "axios";
+        <script>
+            import axios from "axios";
 
 export default {
   data: function() {
@@ -237,13 +234,10 @@ export default {
         return false;
       }	
     },
-    isMostHated: function(post) {
-      console.log(localStorage.getItem('mostHatedId'));
-      if (post.id == localStorage.getItem('mostHatedId')) {
-        console.log(true);
+    isMostHated: function() {
+      if (localStorage.getItem('mostHated') == this.post) {
         return true;
       } else {
-        console.log(false);
         return false;
       }
     }	

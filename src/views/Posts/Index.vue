@@ -126,7 +126,7 @@
                   mostHated = this.posts[i];
                 }
               }
-              localStorage.setItem("mostHated", mostHated);
+              localStorage.setItem('mostHatedId', mostHated.id);
               return mostHated;
 
             },

@@ -39,9 +39,9 @@
                    <img v-bind:src="user.profile_picture" alt="" />
                  </div><!-- .about-photo -->
                  <div class="about-author">
-                   <h3>{{ user.name }}</h3>
+                   <router-link v-bind:to="'/users/' + user.id"><h3>{{ user.name }}</h3></router-link>
                  </div><!-- .about-author -->
-                 <router-link v-bind:to="user.id + '/edit'"><button v-if="current_user.id == user.id" class="btn btn-light">Edit Profile</button></router-link>
+                 <router-link v-bind:to="user.id + '/edit'"><button v-if="isLoggedIn() && current_user.id == user.id" class="btn btn-light">Edit Profile</button></router-link>
                </section><!-- .widget_about -->
 
              </div><!-- .col-md-4 -->
