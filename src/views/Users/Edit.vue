@@ -26,9 +26,13 @@
 		      
 		      <input type="text" class="input-lg form-control" id="name" placeholder="name" v-model="user.name">
 		    </div>
-		    <div class="form-group">
-		      <input type="text" class="input-lg form-control" id="profile_picture" placeholder="url" v-model="user.profile_picture">
+			<div class="form-group">
+		      
+		      <input type="text" class="input-lg form-control" id="email" placeholder="email" v-model="user.email">
 		    </div>
+		    <div class="form-group">
+				<input type="file" v-on:change="setFile($event)" ref="fileInput">
+			</div>
             <div class="form-group">
 		      <input type="text" class="form-control" id="password" placeholder="password" v-model="user.password">
 		    </div>
@@ -54,7 +58,8 @@ export default {
   data: function() {
     return {
       errors: [],
-      user: {}      
+	  user: {},
+	  newProfilePicture: ""      
     };
   },
   created: function() {
@@ -64,14 +69,19 @@ export default {
     });  
   },
   methods: {
+	setFile: function(event) {
+		if (event.target.files.length > 0) {
+			this.newProfilePicture = event.target.files[0];
+		}
+    },
   	submit: function() {
-  		var params = {
-              name: this.user.name,
-              profile_picture_url: this.user.profile_picture,
-              password: this.user.password,
-              id: this.user.id
-  		};
-  		axios.patch("/api/users/" + this.user.id, params).then(response => {
+  		var formData = new FormData();
+			  formData.append("name", this.user.name);
+			  formData.append("email", this.user.email);
+              formData.append("profile_picture_url", this.newProfilePicture);
+			  formData.append("password", this.user.password);
+			  formData.append("id", this.user.id);
+  		axios.patch("/api/users/" + this.user.id, formData).then(response => {
   			console.log("Success!", response.data);
   			this.$router.push("/users/" + this.user.id);
   		}).catch(error => {

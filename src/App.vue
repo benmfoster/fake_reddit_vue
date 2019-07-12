@@ -7,7 +7,7 @@
         <div class="row">
 
           <div class="col-sm-8">
-            <h1 class="site-title"><router-link to="/">Fake Reddit</router-link><span>.</span></a></h1>
+            <h1 class="site-title"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <p class="site-description">Misanthropes pile-driving the internet.</p>
           </div><!-- .col-sm-6 -->
 
@@ -32,7 +32,7 @@
           <ul class="nav navbar-nav">
             <li><router-link to="/">Home</router-link></li>
         <li><router-link v-if="isLoggedIn()" to='/posts/new'>New Post</router-link></li>
-        <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + current_user.id">My Profile</router-link></li>
+        <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + currentUserId()">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>
@@ -59,16 +59,6 @@
 <script>
 import axios from 'axios';
 export default {
-  data: function() {
-    return {
-      current_user: {}
-    }
-  },
-  created: function() {
-    axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
-      this.current_user = response.data;
-    });
-  },
   methods: {
     isLoggedIn: function() {
       if (localStorage.getItem('jwt')) {
@@ -76,6 +66,9 @@ export default {
       } else {
         return false;
       }
+    },
+    currentUserId: function() {
+      return localStorage.getItem('current_user_id');
     }
   }
 };

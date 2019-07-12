@@ -16,7 +16,7 @@
 				<textarea type="text" class="input-lg form-control" rows="10" placeholder="Text:" v-model="post.text"></textarea>
 			</div>
 			<div class="form-group">
-				<input type="text" class="input-lg form-control" placeholder="Image Url:" v-model="post.image_url">
+				<input type="file" v-on:change="setFile($event)" ref="fileInput">
 			</div>
 			<button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Update</button>
 			<router-link to="/../">
@@ -34,7 +34,8 @@ export default {
   data: function() {
     return {
       errors: [],
-      post: {}      
+	  post: {},
+	  newPostImage: ""      
     };
   },
   created: function() {
@@ -43,13 +44,18 @@ export default {
     });  
   },
   methods: {
+	setFile: function(event) {
+		if (event.target.files.length > 0) {
+			this.newPostImage = event.target.files[0];
+		}
+    },
   	submit: function() {
-  		var params = {
-              title: this.post.title,
-              text: this.post.text,
-              image_url: this.post.image_url
-  		};
-  		axios.patch("/api/posts/" + this.post.id, params).then(response => {
+  		var formData = new FormData();
+              formData.append("title", this.post.title);
+              formData.append("text", this.post.text);
+			  formData.append("image_url", this.newPostImage);
+			  formData.append("id", this.post.id);
+  		axios.patch("/api/posts/" + this.post.id, formData).then(response => {
   			console.log("Success!", response.data);
   			this.$router.push("/posts/" + this.post.id);
   		}).catch(error => {

@@ -21,7 +21,7 @@
        <textarea type="text" class="input-lg form-control" rows="10" placeholder="Text:" v-model="newPostText"></textarea>
       </div>
       <div class="form-group">
-        <input type="text" class="input-lg form-control" placeholder="Image Url:" v-model="newPostImage">
+        <input type="file" v-on:change="setFile($event)" ref="fileInput">
       </div>
       <button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Submit</button>
     </form>
@@ -46,21 +46,25 @@ export default {
     };
   },
   methods: {
-      submit: function() {
-        var params = {
-            title: this.newPostTitle,
-            text: this.newPostText,
-            image_url: this.newPostImage
-        };
-        axios
-            .post("/api/posts", params)
-            .then(response => {
-            this.$router.push("/posts/" + response.data.id);
-            })
-            .catch(error => {
-            this.errors = error.response.data.errors;
-            this.status = error.response.status;
-        });
+    setFile: function(event) {
+      if (event.target.files.length > 0) {
+        this.newPostImage = event.target.files[0];
+      }
+    },
+    submit: function() {
+      var formData = new FormData();
+          formData.append("title", this.newPostTitle);
+          formData.append("text", this.newPostText);
+          formData.append("image_url", this.newPostImage); 
+      axios
+          .post("/api/posts", formData)
+          .then(response => {
+          this.$router.push("/posts/" + response.data.id);
+          })
+          .catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+      });
     }
   }
 };

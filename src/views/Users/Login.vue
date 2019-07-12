@@ -33,10 +33,10 @@ export default {
   },
   methods: {
     submit: function() {
-        var params = {
-          email: this.email,
-          password: this.password
-        };
+      var params = {
+        email: this.email,
+        password: this.password
+      }
         axios
           .post("/api/sessions", params)
           .then(response => {

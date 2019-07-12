@@ -48,6 +48,7 @@
                       <span class="news-date">{{ post.date }}</span>
                       <div class="news-entry">
                         <p>{{ shortener(post.text) }}</p>
+                        <a href="http://techcrunch.com/2019/07/11/facebook-ad-targeting-transparency/"></a>
                       </div><!-- .news-entry -->
                       <div class="news-footer">
                         <ul>
@@ -82,39 +83,39 @@
 
     export default {
         data: function() {
-            return {
-                posts: [],
-                current_user: {},
-                mostHatedPost: {}
-            };
-        },
+          return {
+            posts: [],
+            current_user: {},
+            mostHatedPost: {}
+          };
+        },                  
         created: function() {
-            axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
-                this.current_user = response.data;
-            });
-            axios.get("/api/posts").then(response => {
-                this.posts = response.data;
-                this.mostHatedPost = this.mostHated(this.posts);
-                console.log(this.mostHatedPost);
-            });
+          axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
+              this.current_user = response.data;
+          });
+          axios.get("/api/posts").then(response => {
+              this.posts = response.data.reverse();
+              this.mostHatedPost = this.mostHated(this.posts);
+              console.log(this.mostHatedPost);
+          });       
         },
         methods: {
             removeDownvote: function(post) {
-                axios.delete("/api/downvotes/" + post.id).then(response => {
-                    console.log("Success!", response.data);
-                });
-                this.current_user.downvoted_post_ids[post.id] = false;
-                post.total_downvotes--;         
+              axios.delete("/api/downvotes/" + post.id).then(response => {
+                  console.log("Success!", response.data);
+              });
+              this.current_user.downvoted_post_ids[post.id] = false;
+              post.total_downvotes--;         
             },
             downvote: function(post) {
-                var params = {post_id: post.id};
-                axios.post("/api/downvotes", params).then(response => {
-                }).catch(error => {
-                this.errors = error.response.data.errors;
-                this.status = error.response.status;
-                });
-                this.current_user.downvoted_post_ids[post.id] = true;
-                post.total_downvotes++;
+              var params = {post_id: post.id};
+              axios.post("/api/downvotes", params).then(response => {
+              }).catch(error => {
+              this.errors = error.response.data.errors;
+              this.status = error.response.status;
+              });
+              this.current_user.downvoted_post_ids[post.id] = true;
+              post.total_downvotes++;
             },
             shortener: function(string)	{
                 return string.substring(0,500)+" [...]";
