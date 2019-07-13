@@ -95,6 +95,7 @@
                         </div><!-- .comment-metadata -->
                       </footer><!-- .comment-meta -->
                       <div class="comment-content">
+                        <router-link v-bind:to="'/users/' + comment.tagged_user_id">@{{ taggedUserName(comment) }}</router-link>
                         {{ comment.text }}
                         <small v-if="isLoggedIn() && comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
                       </div><!-- .comment-content -->
@@ -127,7 +128,10 @@
 
                   <form v-on:submit.prevent="submit()">
                     <div class="form-group">
-                      <textarea class="form-control" rows="5" placeholder="Message: "></textarea>
+                        <input type="text" class="form-control" placeholder="Tag someone. " v-model="taggedUser">
+                    </div>
+                    <div class="form-group">
+                      <textarea class="form-control" rows="5" placeholder="Message: " v-model="newComment"></textarea>
                     </div>
                     <button class="btn btn-secondary btn-lg btn-block btn-square btn-bordered" type="submit">Submit</button>
                   </form>
@@ -167,6 +171,8 @@ export default {
       newComment: "",
       newCommentId: {},
       isSubmitted: false,
+      users: [],
+      taggedUser: ""
     };
   },
   created: function() {
@@ -175,6 +181,10 @@ export default {
     });
     axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
         this.current_user = response.data;
+    });
+    axios.get("api/users").then(response => {
+      this.users = response.data;
+      console.log(this.users);
     });
     axios.get("/api/posts/" + this.$route.params.id).then(response => {
       this.post = response.data;
@@ -200,9 +210,17 @@ export default {
         post.total_downvotes++;
     },		
     submit: function() {
+      for(var i = 0; i < this.users.length; i++) {
+        if (this.taggedUser == this.users[i].name) {
+          var taggedUserId = this.users[i].id;
+        }
+      }
+      console.log(this.taggedUser);
+      console.log(taggedUserId);
       var formData = new FormData();
       formData.append("text", this.newComment);
       formData.append("post_id", this.post.id);
+      formData.append("tagged_user_id", taggedUserId);
   		axios.post("/api/comments", formData).then(response => {
       this.newCommentId = response.data;
   		}).catch(error => {
@@ -238,15 +256,19 @@ export default {
       }	
     },
     isMostHated: function(post) {
-      console.log(localStorage.getItem('mostHatedId'));
       if (post.id == localStorage.getItem('mostHatedId')) {
-        console.log(true);
         return true;
       } else {
-        console.log(false);
         return false;
       }
-    }	
+    },
+    taggedUserName: function(comment)	{
+      for(var i = 0; i < this.users.length; i++) {
+        if (this.users[i].id == comment.tagged_user_id) {
+          return this.users[i].name;
+        }
+      }
+    }
   }
 };
 </script>
