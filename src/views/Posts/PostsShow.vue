@@ -95,7 +95,7 @@
                         </div><!-- .comment-metadata -->
                       </footer><!-- .comment-meta -->
                       <div class="comment-content">
-                        <router-link v-bind:to="'/users/' + comment.tagged_user_id">@{{ taggedUserName(comment) }}</router-link>
+                        <router-link v-bind:to="'/users/' + comment.tagged_user_id">{{ findtaggedUserName(comment) }}</router-link>
                         {{ comment.text }}
                         <small v-if="isLoggedIn() && comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
                       </div><!-- .comment-content -->
@@ -116,6 +116,7 @@
                           </div><!-- .comment-metadata -->
                         </footer><!-- .comment-meta -->
                         <div class="comment-content">
+                          <router-link v-bind:to="'/users/' + taggedUserId">{{ taggedUserName }}</router-link>
                           {{ newComment }}
                           <small v-on:click="deleteComment(newCommentId)" class="underline-on-hover">Delete</small>
                         </div><!-- .comment-content -->                      
@@ -128,7 +129,17 @@
 
                   <form v-on:submit.prevent="submit()">
                     <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Tag someone. " v-model="taggedUser">
+                      <input type="text" class="form-control" placeholder="Tag someone. " v-model="taggedUserName">
+                      <div v-if="taggedUserName.length > 0 && isShowTaggedUsersDropdown">
+                        <div class="dropdown">
+                          <div class="dropdown-content">
+                            <div v-for="user in filteredItems">
+                              <p v-on:click="fillSearchBar(user)">{{ user.name }}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
                     </div>
                     <div class="form-group">
                       <textarea class="form-control" rows="5" placeholder="Message: " v-model="newComment"></textarea>
@@ -172,7 +183,9 @@ export default {
       newCommentId: {},
       isSubmitted: false,
       users: [],
-      taggedUser: ""
+      taggedUserName: "",
+      taggedUserId: 0,
+      isShowTaggedUsersDropdown: true,
     };
   },
   created: function() {
@@ -189,6 +202,13 @@ export default {
     axios.get("/api/posts/" + this.$route.params.id).then(response => {
       this.post = response.data;
     });
+  },
+  computed: {
+    filteredItems() {
+      return this.users.filter(user => {
+         return user.name.toLowerCase().indexOf(this.taggedUserName.toLowerCase()) > -1
+      })
+    }
   },
   methods: {
     removeDownvote: function(post) {
@@ -211,11 +231,11 @@ export default {
     },		
     submit: function() {
       for(var i = 0; i < this.users.length; i++) {
-        if (this.taggedUser == this.users[i].name) {
+        if (this.taggedUserName == this.users[i].name) {
           var taggedUserId = this.users[i].id;
         }
       }
-      console.log(this.taggedUser);
+      console.log(this.taggedUserName);
       console.log(taggedUserId);
       var formData = new FormData();
       formData.append("text", this.newComment);
@@ -262,12 +282,20 @@ export default {
         return false;
       }
     },
-    taggedUserName: function(comment)	{
+    findtaggedUserName: function(comment)	{
       for(var i = 0; i < this.users.length; i++) {
         if (this.users[i].id == comment.tagged_user_id) {
           return this.users[i].name;
         }
       }
+    },
+    showTaggedUsersDropdown: function() {
+      this.isShowTaggedUsersDropdown = true;
+    },
+    fillSearchBar: function(user) {
+      this.taggedUserName = "@" + user.name;
+      this.isShowTaggedUsersDropdown = false;
+      this.taggedUserId = user.id;
     }
   }
 };
