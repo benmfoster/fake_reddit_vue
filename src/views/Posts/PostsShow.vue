@@ -84,12 +84,12 @@
 
                 <ol class="comment-list" v-for="comment in post.comments">
                   <li>
-                    <article class="comment-body">
-                      <footer class="comment-meta">
+                    
                         <div class="comment-author">
                           <img v-bind:src="comment.author_image" class="avatar" alt="" /> 
                           <router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link>
-                        </div><!-- .comment-author -->
+                        </div><!-- .comment-autho<article class="comment-body">
+                      <footer class="comment-meta">r -->
                         <div class="comment-metadata">
                           <time>{{ comment.last_edited }}</time>
                         </div><!-- .comment-metadata -->
@@ -134,7 +134,8 @@
                         <div class="dropdown">
                           <div class="dropdown-content">
                             <div v-for="user in filteredItems">
-                              <p v-on:click="fillSearchBar(user)">{{ user.name }}</p>
+                                <img v-bind:src="user.profile_picture" class="avatar" alt="" width="20px" />
+                              <span v-on:click="fillSearchBar(user)" style="margin-left: 8px;"> {{ user.name }}</span>
                             </div>
                           </div>
                         </div>
