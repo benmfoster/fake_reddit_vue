@@ -10,7 +10,12 @@
             <div class="col-md-8 col-md-offset-2">
               <div class="row">
 
-
+                <div v-if="current_user.notifications.length > 0">
+                  <h5>Notifications</h5>
+                  <div v-for="notification in current_user.notifications">
+                    <p v-bind:onmouseover="deleteNotification(notification.id)"><router-link v-bind:to="'/users/' + notification.commenter_id">{{ commenter(notification.commenter_id) }}</router-link> tagged you in a comment on <router-link v-bind:to="'/posts/' + notification.post_id">{{ post(notification.post_id) }}</router-link>. {{ notification.created_at }}</p>
+                  </div>
+                </div>
 
 
 
@@ -34,10 +39,6 @@
                     </div><!-- .news-container -->
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
-
-
-
-
 
 
                 <div class="col-md-12" v-for="post in posts" :key="post.id">
@@ -85,6 +86,7 @@
         data: function() {
           return {
             posts: [],
+            users: [],
             current_user: {},
             mostHatedPost: {}
           };
@@ -92,11 +94,14 @@
         created: function() {
           axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
               this.current_user = response.data;
+              console.log(this.current_user);
+          });
+          axios.get("/api/users/").then(response => {
+              this.users = response.data;
           });
           axios.get("/api/posts").then(response => {
               this.posts = response.data.reverse();
               this.mostHatedPost = this.mostHated(this.posts);
-              console.log(this.mostHatedPost);
           });       
         },
         methods: {
@@ -129,7 +134,6 @@
               }
               localStorage.setItem('mostHatedId', mostHated.id);
               return mostHated;
-
             },
             isLoggedIn: function() {
               if (localStorage.getItem('jwt')) {
@@ -137,7 +141,26 @@
               } else {
                 return false;
               }	
-            }	
+            },
+            commenter: function(commenter_id) {
+              for(var i = 0; i < this.users.length; i++) {
+                if (commenter_id == this.users[i].id) {
+                  return this.users[i].name;
+                }
+              }
+            },
+            post: function(post_id) {
+              for(var i = 0; i < this.posts.length; i++) {
+                if (post_id == this.posts[i].id) {
+                  return this.posts[i].title;
+                }
+              }
+            },
+            deleteNotification: function(notificationId) {
+              axios.delete("/api/notifications/" + notificationId).then(response => {
+                  console.log("Success!", response.data);
+              });
+            }
         }
 
     }  
