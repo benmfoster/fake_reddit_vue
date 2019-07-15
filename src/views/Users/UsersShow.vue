@@ -10,7 +10,7 @@
             <!-- content-area -->
             <div class="col-md-8">
               <h3 style="text-align:center;">Recent Posts</h3>
-              <div v-for="post in user.posts" :key="post.id">
+              <div v-for="post in posts" :key="post.id">
               <article>
                 <div class="news-container">
                   
@@ -66,6 +66,7 @@ export default {
   data: function() {
     return {
       user: {},
+      posts: {},
       current_user: {},
       showComments: false 
     };
@@ -73,6 +74,7 @@ export default {
   created: function() {
     axios.get("/api/users/" + this.$route.params.id).then(response => {
       this.user = response.data;
+      this.posts = this.user.posts.reverse();
     });
     axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
         this.current_user = response.data;

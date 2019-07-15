@@ -40,7 +40,8 @@ export default {
   },
   created: function() {
       axios.get("/api/posts/" + this.$route.params.id).then(response => {
-      this.post = response.data;
+	  this.post = response.data;
+	  console.log(this.post);
     });  
   },
   methods: {
@@ -63,7 +64,7 @@ export default {
   		});
   	},
   	destroyPost: function() {
-  		if(confirm("Do you really want to delete " + this.post.name + "?"))
+  		if(confirm("Do you really want to delete " + this.post.title + "?"))
   		axios.delete("/api/posts/" + this.post.id).then(response => {
   			console.log("Success!", response.data);
   			this.$router.push("/");

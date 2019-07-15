@@ -40,19 +40,34 @@
                       </div><!-- .col-md-6 -->
                       <div class="col-md-6">
                         <div class="news-footer-share">
-                            <router-link v-bind:to="post.id">Comments {{ post.comments.length }}</router-link>
+
+                            <router-link v-bind:to="post.id">
+                              Comments {{ post.comments.length }}
+                            </router-link>
+
                             <span v-if="isLoggedIn()">
-                              <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">↓ {{ post.total_downvotes }}</button>
-                              <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">↓ {{ post.total_downvotes }}</button>
+
+                              <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
+                                ↓ {{ post.total_downvotes }}
+                              </button>
+
+                              <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
+                                ↓ {{ post.total_downvotes }}
+                              </button>
+
                             </span>
+
                             <span v-else>
                               <button>↓ {{ post.total_downvotes }}</button>
                             </span>
     
                               <router-link v-bind:to="post.id + '/edit'">
-                                <button class="btn btn-warning" v-if="isLoggedIn() && current_user.name == post.authored_by">Edit Post</button>
+
+                                <button class="btn btn-warning" v-if="isLoggedIn() && current_user.name == post.authored_by">
+                                  Edit Post
+                                </button>
+
                               </router-link>    
-                            
   
                         </div>
                       </div><!-- .col-md-6 -->
@@ -88,18 +103,24 @@
                         <div class="comment-author">
                           <img v-bind:src="comment.author_image" class="avatar" alt="" /> 
                           <router-link v-bind:to="'../users/' + comment.author_id">{{ comment.authored_by }}</router-link>
-                        </div><!-- .comment-autho<article class="comment-body">
-                      <footer class="comment-meta">r -->
+                        </div><!-- .comment-author -->
                         <div class="comment-metadata">
                           <time>{{ comment.last_edited }}</time>
                         </div><!-- .comment-metadata -->
-                      </footer><!-- .comment-meta -->
                       <div class="comment-content">
-                        <router-link v-bind:to="'/users/' + comment.tagged_user_id">{{ findtaggedUserName(comment) }}</router-link>
+                        <router-link v-bind:to="'/users/' + comment.tagged_user_id">
+                          {{ findTaggedUserName(comment) }}
+                        </router-link>
                         {{ comment.text }}
-                        <small v-if="isLoggedIn() && comment.authored_by == current_user.name" v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</small>
+                        <small v-if="isLoggedIn() && comment.authored_by == current_user.name">
+                          <span v-on:click="toggleEditComment(comment)" class="underline-on-hover"> Edit </span>
+                          <span v-on:click="deleteComment(comment)" class="underline-on-hover">Delete</span>
+                        </small>
+                        <div v-if="currentComment === comment">
+                          <input type="text" class="form-control" placeholder="Edit comment." v-model="commentEditText" />
+                          <button v-on:click="submitCommentEdit(comment)">Submit</button>
+                        </div>
                       </div><!-- .comment-content -->
-                    </article><!-- .comment-body -->
 
                   </li>
                 </ol>
@@ -109,16 +130,23 @@
                       <article class="comment-body">
                         <footer class="comment-meta">
                           <div class="comment-author">
-                            <img v-bind:src="current_user.profile_picture_url" class="avatar" alt=""> 
+                            <img v-bind:src="current_user.profile_picture" class="avatar" alt=""> 
                             <router-link v-bind:to="'../users/' + current_user.id">{{ current_user.name }}</router-link>
                           </div><!-- .comment-author -->
                           <div class="comment-metadata">
                           </div><!-- .comment-metadata -->
                         </footer><!-- .comment-meta -->
                         <div class="comment-content">
-                          <router-link v-bind:to="'/users/' + taggedUserId">{{ taggedUserName }}</router-link>
-                          {{ newComment }}
-                          <small v-on:click="deleteComment(newCommentId)" class="underline-on-hover">Delete</small>
+                          <router-link v-bind:to="'/users/' + taggedUserId">{{ newCommentTag }}</router-link>
+                          {{ showNewComment }}
+                          <small>
+                            <span v-on:click="toggleEditComment(newCommentObject)" class="underline-on-hover"> Edit </span>
+                            <span v-on:click="deleteComment(newCommentObject)" class="underline-on-hover">Delete</span>
+                          </small>
+                          <div v-if="currentComment === newCommentObject">
+                            <input type="text" class="form-control" placeholder="Edit comment." v-model="commentEditText" />
+                            <button v-on:click="submitCommentEdit(newCommentObject)">Submit</button>
+                        </div>
                         </div><!-- .comment-content -->                      
                       </article><!-- .comment-body -->
                     </li>
@@ -181,12 +209,16 @@ export default {
       current_user: {},
       errors: [],
       newComment: "",
-      newCommentId: {},
+      showNewComment: "",
+      newCommentObject: {},
       isSubmitted: false,
       users: [],
       taggedUserName: "",
       taggedUserId: 0,
       isShowTaggedUsersDropdown: true,
+      newCommentTag: "",
+      commentEditText: "",
+      currentComment: {}
     };
   },
   created: function() {
@@ -198,7 +230,6 @@ export default {
     });
     axios.get("api/users").then(response => {
       this.users = response.data;
-      console.log(this.users);
     });
     axios.get("/api/posts/" + this.$route.params.id).then(response => {
       this.post = response.data;
@@ -232,29 +263,64 @@ export default {
     },		
     submit: function() {
       for(var i = 0; i < this.users.length; i++) {
-        if (this.taggedUserName == this.users[i].name) {
-          var taggedUserId = this.users[i].id;
+        if (this.taggedUserName.toLowerCase().substring(1) == this.users[i].name.toLowerCase()) {
+          this.taggedUserId = this.users[i].id;
+          var params = {
+            user_id: this.users[i].id,
+            post_id: this.post.id
+          };
+          axios.post("/api/notifications", params).then(response => { 
+            console.log(response.data);
+          }).catch(error => {
+          this.errors = error.response.data.errors;
+          this.status = error.response.status;
+          });
         }
       }
-      console.log(this.taggedUserName);
-      console.log(taggedUserId);
-      var formData = new FormData();
-      formData.append("text", this.newComment);
-      formData.append("post_id", this.post.id);
-      formData.append("tagged_user_id", taggedUserId);
-  		axios.post("/api/comments", formData).then(response => {
-      this.newCommentId = response.data;
-  		}).catch(error => {
+          var formData = new FormData();
+          formData.append("text", this.newComment);
+          formData.append("post_id", this.post.id);
+          formData.append("tagged_user_id", this.taggedUserId);
+          axios.post("/api/comments", formData).then(response => {
+          this.newCommentObject = response.data;
+          }).catch(error => {
+            this.errors = error.response.data.errors;
+            this.status = error.response.status;
+          });
+          this.isSubmitted = true;
+          this.newCommentTag = this.taggedUserName;
+          this.taggedUserName = "";
+          this.showNewComment = this.newComment;
+          this.newComment = "";  
+    },
+    toggleEditComment: function(comment) {
+      if(this.currentComment === comment) {
+        this.currentComment = {};
+      } else {
+        this.currentComment = comment;
+      }
+      console.log(comment.text);
+      this.commentEditText = comment.text;
+    },
+    submitCommentEdit: function(comment) {
+      comment.text = this.commentEditText;
+      this.showNewComment = this.commentEditText;
+      var params = {
+        text: this.commentEditText
+      };
+      axios.patch("/api/comments/" + comment.id, params).then(response => {
+            console.log("Success!", response.data);
+        }).catch(error => {
         this.errors = error.response.data.errors;
         this.status = error.response.status;
-      });
-      this.isSubmitted = true;
+        });
+      this.currentComment = {};
     },
     deleteComment: function(comment) {
         axios.delete("/api/comments/" + comment.id).then(response => {
             console.log("Success!", response.data);
         });
-        if (comment == this.newCommentId) {
+        if (comment == this.newCommentObject) {
           this.isSubmitted = false;
         } else {
           this.post.comments.splice(this.post.comments.indexOf(comment), 1);
@@ -283,7 +349,7 @@ export default {
         return false;
       }
     },
-    findtaggedUserName: function(comment)	{
+    findTaggedUserName: function(comment)	{
       for(var i = 0; i < this.users.length; i++) {
         if (this.users[i].id == comment.tagged_user_id) {
           return this.users[i].name;
