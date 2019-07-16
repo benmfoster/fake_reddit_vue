@@ -11,9 +11,38 @@
               <div class="row">
 
                 <div v-if="current_user.notifications.length > 0">
+
                   <h5>Notifications</h5>
-                  <div v-for="notification in current_user.notifications">
-                    <p v-bind:onmouseover="deleteNotification(notification.id)"><router-link v-bind:to="'/users/' + notification.commenter_id">{{ commenter(notification.commenter_id) }}</router-link> tagged you in a comment on <router-link v-bind:to="'/posts/' + notification.post_id">{{ post(notification.post_id) }}</router-link>. {{ notification.created_at }}</p>
+
+                  <div v-for="notification in sortedNotifications">
+
+                    <p v-bind:onmouseover="deleteNotification(notification.id)" v-if="notification.tag == true">
+
+                      <router-link v-bind:to="'/users/' + notification.commenter_id">
+                        {{ commenter(notification.commenter_id) }}
+                      </router-link>
+
+                       tagged you in a comment on 
+                       <router-link v-bind:to="'/posts/' + notification.post_id">
+                        {{ post(notification.post_id) }}
+                       </router-link>
+
+                       . {{ notification.created_at }}
+                    </p>
+
+                    <p v-bind:onmouseover="deleteNotification(notification.id)" v-else>
+
+                      <router-link v-bind:to="'/users/' + notification.commenter_id">
+                        {{ commenter(notification.commenter_id) }}
+                      </router-link>
+
+                       commented on 
+                       <router-link v-bind:to="'/posts/' + notification.post_id">
+                        {{ post(notification.post_id) }}
+                       </router-link>
+
+                       . {{ notification.created_at }}
+                    </p>
                   </div>
                 </div>
 
@@ -88,13 +117,14 @@
             posts: [],
             users: [],
             current_user: {},
-            mostHatedPost: {}
+            mostHatedPost: {},
+            sortedNotifications: {}
           };
         },                  
         created: function() {
           axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
               this.current_user = response.data;
-              console.log(this.current_user);
+              this.sortedNotifications = this.current_user.notifications.sort((a, b) => a.id - b.id);
           });
           axios.get("/api/users/").then(response => {
               this.users = response.data;

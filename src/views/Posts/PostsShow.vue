@@ -97,7 +97,7 @@
                     {{ post.comments.length }} comments
                 </h2><!-- .comments-title -->
 
-                <ol class="comment-list" v-for="comment in post.comments">
+                <ol class="comment-list" v-for="comment in sortedComments">
                   <li>
                     
                         <div class="comment-author">
@@ -214,11 +214,12 @@ export default {
       isSubmitted: false,
       users: [],
       taggedUserName: "",
-      taggedUserId: 0,
+      taggedUserId: -1,
       isShowTaggedUsersDropdown: true,
       newCommentTag: "",
       commentEditText: "",
-      currentComment: {}
+      currentComment: {},
+      sortedComments: {}
     };
   },
   created: function() {
@@ -233,6 +234,7 @@ export default {
     });
     axios.get("/api/posts/" + this.$route.params.id).then(response => {
       this.post = response.data;
+      this.sortedComments = this.post.comments.sort((a, b) => a.id - b.id);
     });
   },
   computed: {
@@ -262,36 +264,49 @@ export default {
         post.total_downvotes++;
     },		
     submit: function() {
-      for(var i = 0; i < this.users.length; i++) {
-        if (this.taggedUserName.toLowerCase().substring(1) == this.users[i].name.toLowerCase()) {
-          this.taggedUserId = this.users[i].id;
+      if (this.taggedUserName.length > 0) {
+        for(var i = 0; i < this.users.length; i++) {
+          if (this.taggedUserName.toLowerCase().substring(1) == this.users[i].name.toLowerCase()) {
+            this.taggedUserId = this.users[i].id;
+            var params = {
+              user_id: this.users[i].id,
+              post_id: this.post.id,
+              tag: true
+            };
+            console.log(params);
+          }
+        }
+      } else {
           var params = {
-            user_id: this.users[i].id,
-            post_id: this.post.id
+            post_id: this.post.id,
+            user_id: this.post.author_id,
+            tag: false           
           };
-          axios.post("/api/notifications", params).then(response => { 
+          console.log(params);
+      }
+      if (this.current_user.id != this.post.author_id) {
+        axios.post("/api/notifications", params).then(response => { 
             console.log(response.data);
           }).catch(error => {
           this.errors = error.response.data.errors;
           this.status = error.response.status;
           });
-        }
       }
-          var formData = new FormData();
-          formData.append("text", this.newComment);
-          formData.append("post_id", this.post.id);
-          formData.append("tagged_user_id", this.taggedUserId);
-          axios.post("/api/comments", formData).then(response => {
-          this.newCommentObject = response.data;
-          }).catch(error => {
-            this.errors = error.response.data.errors;
-            this.status = error.response.status;
-          });
-          this.isSubmitted = true;
-          this.newCommentTag = this.taggedUserName;
-          this.taggedUserName = "";
-          this.showNewComment = this.newComment;
-          this.newComment = "";  
+      var formData = new FormData();
+      formData.append("text", this.newComment);
+      formData.append("post_id", this.post.id);
+      formData.append("tagged_user_id", this.taggedUserId);
+      axios.post("/api/comments", formData).then(response => {
+      this.newCommentObject = response.data;
+      }).catch(error => {
+        this.errors = error.response.data.errors;
+        this.status = error.response.status;
+      });
+      this.isSubmitted = true;
+      this.newCommentTag = this.taggedUserName;
+      this.taggedUserName = "";
+      this.showNewComment = this.newComment;
+      this.newComment = ""; 
     },
     toggleEditComment: function(comment) {
       if(this.currentComment === comment) {
