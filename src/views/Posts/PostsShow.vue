@@ -94,7 +94,7 @@
 
               <div id="comments" class="comments-area">
                 <h2 class="comments-title" v-if="toggleCommentsHeader()">
-                    {{ post.comments.length }} comments
+                    {{ numberOfComments }} comments
                 </h2><!-- .comments-title -->
 
                 <ol class="comment-list" v-for="comment in sortedComments">
@@ -219,7 +219,8 @@ export default {
       newCommentTag: "",
       commentEditText: "",
       currentComment: {},
-      sortedComments: {}
+      sortedComments: {},
+      numberOfComments: 0
     };
   },
   created: function() {
@@ -235,6 +236,7 @@ export default {
     axios.get("/api/posts/" + this.$route.params.id).then(response => {
       this.post = response.data;
       this.sortedComments = this.post.comments.sort((a, b) => a.id - b.id);
+      this.numberOfComments = this.post.comments.length;
     });
   },
   computed: {
@@ -306,7 +308,8 @@ export default {
       this.newCommentTag = this.taggedUserName;
       this.taggedUserName = "";
       this.showNewComment = this.newComment;
-      this.newComment = ""; 
+      this.newComment = "";
+      this.numberOfComments += 1; 
     },
     toggleEditComment: function(comment) {
       if(this.currentComment === comment) {
