@@ -62,10 +62,10 @@
                           <i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + mostHatedPost.id"> Comments {{ mostHatedPost.comments.length }} </router-link>
 
                           <span v-if="isLoggedIn()">
-                            <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="color:red; margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button>
-                            <button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button>
+                            <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ mostHatedPost.total_downvotes }}</button>
+                            <button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ mostHatedPost.total_downvotes }}</button>
                           </span>
-                          <span v-else><button style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button></span>
+                          <span v-else><button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ mostHatedPost.total_downvotes }}</button></span>
                         
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
@@ -85,8 +85,8 @@
                       <div class="news-footer">
                         <ul>
                           <span><i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + post.id"> Comments {{ post.comments.length }} </router-link></span>
-                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red; margin-left: 10px;">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
-                          <span v-if="!isLoggedIn()" style="margin-left: 10px;"><button>↓ {{ post.total_downvotes }}</button></span>
+                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button></span>
+                          <span v-if="!isLoggedIn()"><button style="margin-left: 10px;font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button></span>
                         </ul>
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
@@ -107,6 +107,9 @@
     .hide {
         display: none;
         visibility: hidden;
+    }
+    .downvote {
+      font-size: 20;
     }
 </style>
 

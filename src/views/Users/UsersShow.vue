@@ -22,8 +22,20 @@
                   <div class="news-footer">
                    
                       <i class="fa fa-comments-o"></i> <router-link v-bind:to="'/posts/' + post.id"> Comments {{ post.comments.length }} </router-link>
-                      <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:spanck="removeDownvote(post)" style="color:red; margin-left: 10px;">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
-                      <span v-else><button style="margin-left: 10px;">↓ {{ post.total_downvotes }}</button></span>
+
+                      <span v-if="isLoggedIn()">
+
+                        <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ post.total_downvotes }}</button>
+
+                        <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button>
+
+                      </span>
+
+                      <span v-else>
+
+                        <button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button>
+                        
+                      </span>
                     
                   </div><!-- .news-footer -->
                 </div><!-- .news-container -->

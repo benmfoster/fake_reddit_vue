@@ -47,18 +47,18 @@
 
                             <span v-if="isLoggedIn()">
 
-                              <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="color:red;">
+                              <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">
                                 ↓ {{ post.total_downvotes }}
                               </button>
 
-                              <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)">
+                              <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">
                                 ↓ {{ post.total_downvotes }}
                               </button>
 
                             </span>
 
                             <span v-else>
-                              <button>↓ {{ post.total_downvotes }}</button>
+                              <button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button>
                             </span>
     
                               <router-link v-bind:to="post.id + '/edit'">
