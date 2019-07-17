@@ -13,7 +13,7 @@
               <div v-for="post in posts" :key="post.id">
               <article>
                 <div class="news-container">
-                  
+                  <h2 v-if="isMostHated(post)">Most Hated: </h2>
                   <h1 class="news-title"><router-link v-bind:to="'../posts/' + post.id">{{ post.title }}</router-link></h1>
                   <span class="news-date">{{ post.last_edited }}</span>
                   <div class="news-entry">
@@ -116,6 +116,13 @@ export default {
       } else {
         return false;
       }	
+    },
+    isMostHated: function(post) {
+      if (localStorage.getItem('mostHatedId') == post.id) {
+        return true;
+      } else {
+        return false;
+      }
     }	
     }	
   }
