@@ -34,7 +34,7 @@
 				<input type="file" v-on:change="setFile($event)" ref="fileInput">
 			</div>
             <div class="form-group">
-		      <input type="text" class="form-control" id="password" placeholder="password" v-model="user.password">
+		      <input type="password" class="form-control" id="password" placeholder="password" v-model="user.password">
 		    </div>
 		  </div>
 		  	<button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Update</button>
@@ -64,8 +64,12 @@ export default {
   },
   created: function() {
       axios.get("/api/users/" + this.$route.params.id).then(response => {
-      this.user = response.data;
-      console.log(this.user);
+		this.user = response.data;
+		console.log(this.user);
+	});  
+	axios.get("/api/comments/").then(response => {
+		this.comments = response.data;
+		console.log(this.comments);
     });  
   },
   methods: {
@@ -90,10 +94,28 @@ export default {
   	},
   	destroyUser: function() {
   		if(confirm("Do you really want to delete " + this.user.name + "?"))
-  		axios.delete("/api/users/" + this.user.id).then(response => {
-  			console.log("Success!", response.data);
-  			this.$router.push("/");
-  		});
+		for(var i = 0; i < this.user.posts.length; i++) {
+			axios.delete("api/posts/" + this.user.posts[i].id).then(response => {
+				console.log("Success!", response.data);
+			});
+		}
+		for(var i = 0; i < this.user.comments.length; i++) {
+			axios.delete("api/comments/" + this.user.comments[i].id).then(response => {
+				console.log("Success!", response.data);
+			});
+		}
+		for(var i = 0; i < this.comments.length; i++) {
+			var params = {tagged_user_id: -1};
+			if (this.comments[i].tagged_user_id == this.user.id) {
+				axios.patch("api/comments/" + this.comments[i].id, params).then(response => {
+					console.log("Success!", response.data);
+				});
+			}
+		}
+		axios.delete("/api/users/" + this.user.id).then(response => {
+			console.log("Success!", response.data);
+			this.$router.push("/logout");
+		});
   	}
   }
 };

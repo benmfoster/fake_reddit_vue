@@ -370,7 +370,7 @@ export default {
     findTaggedUserName: function(comment)	{
       for(var i = 0; i < this.users.length; i++) {
         if (this.users[i].id == comment.tagged_user_id) {
-          return this.users[i].name;
+          return "@" + this.users[i].name;
         }
       }
     },

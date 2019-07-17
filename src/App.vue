@@ -31,8 +31,8 @@
         <div class="collapse navbar-collapse" id="amalia-navbar-collapse">
           <ul class="nav navbar-nav">
             <li><router-link to="/">Home</router-link></li>
-        <li><router-link v-if="isLoggedIn()" to='/posts/new'>New Post</router-link></li>
-        <li><router-link v-if="isLoggedIn()" v-bind:to="'/users/' + currentUserId()">My Profile</router-link></li>
+        <li v-if="isLoggedIn()"><router-link to='/posts/new'>New Post</router-link></li>
+        <li v-if="isLoggedIn()"><router-link v-bind:to="'/users/' + currentUserId()">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>

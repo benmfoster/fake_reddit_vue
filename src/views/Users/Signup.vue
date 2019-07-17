@@ -1,7 +1,7 @@
 <template>
   <div class="signup">
     <div class="container">
-      <form v-on:submit.prevent="submit()">
+      <form v-on:submit.prevent="submit()" style="margin-bottom: 20px;">
         <h1>Signup</h1>
         <ul>
           <li class="text-danger" v-for="error in errors">{{ error }}</li>
@@ -15,6 +15,7 @@
           <input type="email" class="form-control" v-model="email">
         </div>
         <div class="form-group">
+          <label>Profile Picture:</label>
           <input type="file" v-on:change="setFile($event)" ref="fileInput">
         </div>
         <div class="form-group">
@@ -58,32 +59,12 @@ export default {
         formData.append("profile_picture_url", this.newProfilePicture);
         formData.append("password", this.password);
         formData.append("password_confirmation", this.passwordConfirmation);
-      axios
-        .post("/api/users", formData)
-        .then(response => {
-        })
-        .catch(error => {
+      axios.post("/api/users", formData).then(response => {
+        this.$router.push("/login");
+        }).catch(error => {
           this.errors = error.response.data.errors;
-        });
-      var params = {
-        email: this.email,
-        password: this.password
-    };
-      axios
-        .post("/api/sessions", params)
-        .then(response => {
-          axios.defaults.headers.common["Authorization"] =
-            "Bearer " + response.data.jwt;
-          localStorage.setItem("jwt", response.data.jwt);
-          localStorage.setItem("current_user_id", response.data.user_id);
-          this.$router.push("/");
-        })
-        .catch(error => {
-          this.errors = ["Invalid email or password."];
-          this.email = "";
-          this.password = "";
         });     
-    }
+    }    
   }
-};
+}
 </script>

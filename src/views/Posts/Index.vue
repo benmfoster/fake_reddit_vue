@@ -10,7 +10,7 @@
             <div class="col-md-8 col-md-offset-2">
               <div class="row">
 
-                <div v-if="current_user.notifications.length > 0">
+                <div v-if="isLoggedIn() && current_user.notifications.length > 0">
 
                   <h5>Notifications</h5>
 
@@ -61,7 +61,10 @@
                         
                           <i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + mostHatedPost.id"> Comments {{ mostHatedPost.comments.length }} </router-link>
 
-                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="color:red; margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button></span>
+                          <span v-if="isLoggedIn()">
+                            <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="color:red; margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button>
+                            <button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button>
+                          </span>
                           <span v-else><button style="margin-left: 10px;">↓ {{ mostHatedPost.total_downvotes }}</button></span>
                         
                       </div><!-- .news-footer -->
@@ -78,7 +81,6 @@
                       <span class="news-date">{{ post.date }}</span>
                       <div class="news-entry">
                         <p>{{ shortener(post.text) }}</p>
-                        <a href="http://techcrunch.com/2019/07/11/facebook-ad-targeting-transparency/"></a>
                       </div><!-- .news-entry -->
                       <div class="news-footer">
                         <ul>
@@ -122,10 +124,12 @@
           };
         },                  
         created: function() {
-          axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
-              this.current_user = response.data;
-              this.sortedNotifications = this.current_user.notifications.sort((a, b) => a.id - b.id);
-          });
+          if (this.isLoggedIn() == true) {
+            axios.get("/api/users/" + localStorage.getItem('current_user_id')).then(response => {
+                this.current_user = response.data;
+                this.sortedNotifications = this.current_user.notifications.sort((a, b) => a.id - b.id);
+            });
+          }
           axios.get("/api/users/").then(response => {
               this.users = response.data;
           });
