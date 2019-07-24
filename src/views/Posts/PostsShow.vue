@@ -9,10 +9,14 @@
 
             <!-- content-area -->
             <div class="col-md-8">
+              <span v-if="isMostHated(post)"><div class="gold-oval">
+  <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1" onmouseover="this.src='https://media3.giphy.com/media/3o7TKUeunlrFIX4QTe/200w.webp?cid=790b76115d38c97c2f537779363f60d2&rid=200w.webp';" onmouseout="this.src='https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1';" />
+  <small class="most-hated-text">🏆 most hated</small>
+</div></span>
               <article>
                 <div class="news-container">
                   
-                    <span v-if="isMostHated(post)"><h2>Most Hated:</h2></span><h1 class="news-title">{{ post.title }}</h1>
+                    <h1 class="news-title">{{ post.title }}</h1>
                     <span class="news-date">{{ post.date }}</span>
                     <div class="author-info">
                         <small>posted by <router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link></small>
@@ -196,6 +200,39 @@
   .underline-on-hover:hover {
       text-decoration: underline;
   }
+  .gold-oval {
+  width: 120px;
+  height: 120px;
+  background-color: gold;
+  radius: 15px;
+  border-radius: 50%;
+  position: relative;
+  text-align: center;
+  margin: 0 auto 40px;
+}
+
+.gold-oval:hover {
+  opacity: 0.9;
+}
+
+.gold-oval img {
+  width: 80%;
+  margin: 10%;
+  border-radius: 50%;
+}
+
+.most-hated-text {
+  background-color: gold;
+  opacity: 0.9;
+  border-radius: 15px;
+  padding: 10px;
+  font-family: Impact, Charcoal, sans-serif;
+  color: black;
+}
+
+.most-hated-text:hover {
+  color: dimgray;
+}
 </style>
         
 <script>
