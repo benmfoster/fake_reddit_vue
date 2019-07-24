@@ -36,6 +36,14 @@
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
         <li v-if="!isLoggedIn()"><router-link to="/login">Login</router-link></li>
         <li v-if="!isLoggedIn()" class="cta"><router-link to="/signup">Sign Up</router-link></li>
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Github <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="https://github.com/benmfoster/fake_reddit_vue">Frontend Repository (Vue.js)</a></li>
+                <li><a href="https://github.com/benmfoster/fake_reddit">Backend Repository (Ruby on Rails)</a></li>
+              </ul>
+            </li>
+        <li class="cta"><a href="https://benmfoster.github.io">About Me</a></li>
           </ul><!-- .navbar-nav -->
         </div><!-- .navbar-collapse -->
       </div><!-- .container -->
