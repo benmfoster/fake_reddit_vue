@@ -12,7 +12,7 @@
               <h3 style="text-align:center;">Recent Posts</h3>
               <div v-for="post in posts" :key="post.id">
                 <span v-if="isMostHated(post)"><div class="gold-oval">
-  <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1" onmouseover="this.src='https://media3.giphy.com/media/3o7TKUeunlrFIX4QTe/200w.webp?cid=790b76115d38c97c2f537779363f60d2&rid=200w.webp';" onmouseout="this.src='https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1';" />
+  <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.expressmedals.com%2Fv%2Fvspfiles%2Fphotos%2F8200416-BLU-1.jpg&f=1" onmouseover="this.src='https://media3.giphy.com/media/3o7TKUeunlrFIX4QTe/200w.webp?cid=790b76115d38c97c2f537779363f60d2&rid=200w.webp';" onmouseout="this.src='https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1';" />
   <small class="most-hated-text">🏆 most hated</small>
 </div></span>
               <article>
