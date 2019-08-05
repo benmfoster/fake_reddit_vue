@@ -23,7 +23,7 @@
       <div class="form-group">
         <input type="file" v-on:change="setFile($event)" ref="fileInput">
       </div>
-      <button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Submit</button>
+        <button type="submit" class="btn btn-block btn-square btn-lg btn-secondary">Submit</button>
     </form>
 
     
