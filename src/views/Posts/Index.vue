@@ -175,7 +175,8 @@
           axios.get("/api/posts").then(response => {
               this.posts = response.data.reverse();
               this.mostHatedPost = this.mostHated(this.posts);
-          });       
+          }); 
+          vm.$forceUpdate();      
         },
         methods: {
             removeDownvote: function(post) {
