@@ -3,12 +3,13 @@
     <div class="site-main">
       <!-- header -->
     <div class="header">
+      
       <div class="container">
         <div class="row">
 
           <div class="col-sm-8">
             <h1 class="site-title"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
-            <p class="site-description">Misanthropes pile-driving the internet.</p>
+            <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
           </div><!-- .col-sm-6 -->
 
         </div><!-- .row -->
@@ -51,7 +52,7 @@
       </div><!-- .container -->
     </nav><!-- .navbar -->
     <router-view :key="$route.path"></router-view>
-    <div class="footer" style="background-image: url('img/amalia-image-footer.jpg');">
+    <div class="footer" style="background-color:blue;">
       <div class="container">
         <div class="row">
 

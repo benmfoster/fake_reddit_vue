@@ -47,15 +47,12 @@
                 </div>
 
 
-<div class="gold-oval">
-  <img src="https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.expressmedals.com%2Fv%2Fvspfiles%2Fphotos%2F8200416-BLU-1.jpg&f=1" onmouseover="this.src='https://media3.giphy.com/media/3o7TKUeunlrFIX4QTe/200w.webp?cid=790b76115d38c97c2f537779363f60d2&rid=200w.webp';" onmouseout="this.src='https://proxy.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.cemetech.net%2Fprograms%2Fzipview.php%3Fid%3D1466%26file%3Dsrc%2Fgfx%2FOriginals%2FBlue-square.jpg&f=1';" />
-  <small class="most-hated-text">🏆 most hated</small>
-</div>
+
                 <div class="col-md-12">
                   <article class="post">
                     <div class="news-container">
                       <span class="news-category"><router-link v-bind:to="'users/' + mostHatedPost.author_id">{{ mostHatedPost.authored_by }}</router-link></span>
-                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><h1 class="news-title">{{ mostHatedPost.title }}</h1></router-link>
+                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><h1 class="news-title"><span id="hated">Most Hated:</span><br />{{ mostHatedPost.title }}</h1></router-link>
                       <span class="news-date">{{ mostHatedPost.date }}</span>
                       <div class="news-entry">
                         <p>{{ shortener(mostHatedPost.text) }}</p>
@@ -72,6 +69,7 @@
                         
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
+                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" />
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
 
@@ -93,6 +91,7 @@
                         </ul>
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
+                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" width="100%" />
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
 
@@ -114,39 +113,11 @@
     .downvote {
       font-size: 20;
     }
-    .gold-oval {
-  width: 120px;
-  height: 120px;
-  background-color: gold;
-  radius: 15px;
-  border-radius: 50%;
-  position: relative;
-  text-align: center;
-  margin: 0 auto 40px;
-}
-
-.gold-oval:hover {
-  opacity: 0.9;
-}
-
-.gold-oval img {
-  width: 80%;
-  margin: 10%;
-  border-radius: 50%;
-}
-
-.most-hated-text {
-  background-color: gold;
-  opacity: 0.9;
-  border-radius: 15px;
-  padding: 10px;
-  font-family: Impact, Charcoal, sans-serif;
-  color: black;
-}
-
-.most-hated-text:hover {
-  color: dimgray;
-}
+    #hated {
+      font-family: 'Titillium Web', sans-serif;
+      font-size: 20px;
+      font-weight: 200;
+    }
 </style>
 
 <script>
