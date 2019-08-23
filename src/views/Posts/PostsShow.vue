@@ -261,6 +261,7 @@ export default {
     };
   },
   created: function() {
+    vm.$forceUpdate();
     axios.get("/api/users/" + this.$route.params.id).then(response => {
       this.user = response.data;
     });
