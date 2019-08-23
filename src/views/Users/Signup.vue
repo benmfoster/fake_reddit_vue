@@ -60,11 +60,32 @@ export default {
         formData.append("password", this.password);
         formData.append("password_confirmation", this.passwordConfirmation);
       axios.post("/api/users", formData).then(response => {
-        this.$router.push("/login");
+        // this.$router.push("/login");
         }).catch(error => {
           this.errors = error.response.data.errors;
-        });     
+        });
+        this.login()     
+    },
+    login: function() {
+      var params = {
+        email: this.email,
+        password: this.password
+      }
+        axios
+          .post("/api/sessions", params)
+          .then(response => {
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + response.data.jwt;
+            localStorage.setItem("jwt", response.data.jwt);
+            localStorage.setItem("current_user_id", response.data.user_id);
+            this.$router.push("/");
+          })
+          .catch(error => {
+            this.errors = ["Invalid email or password."];
+            this.email = "";
+            this.password = "";
+          });              
+        }
     }    
   }
-}
 </script>
