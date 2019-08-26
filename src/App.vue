@@ -8,7 +8,7 @@
         <div class="row">
 
           <div class="col-sm-8">
-            <h1 class="site-title"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
+            <h1 class="site-title fadey"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
           </div><!-- .col-sm-6 -->
 
@@ -51,13 +51,13 @@
         </div><!-- .navbar-collapse -->
       </div><!-- .container -->
     </nav><!-- .navbar -->
-    <router-view :key="$route.path"></router-view>
+    <router-view class="fadey" :key="$route.path" v-if="displayRouterViewConst"></router-view>
     <div class="footer" style="background-color:blue;">
       <div class="container">
         <div class="row">
 
           <div class="col-md-4">
-            <h3>Fake Reddit<span>.</span></h3>
+            <h3 class="animated zoomInRight">Fake Reddit<span>.</span></h3>
           </div><!-- .col-md-4 -->
 
         </div><!-- .row -->
@@ -67,9 +67,57 @@
   </div>
 </template>
 
+<style>
+
+.fadey {
+  -webkit-animation: fadein 0.8s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 0.8s; /* Firefox < 16 */
+        -ms-animation: fadein 0.8s; /* Internet Explorer */
+         -o-animation: fadein 0.8s; /* Opera < 12.1 */
+            animation: fadein 0.8s;
+}
+
+  @keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+</style>
+
 <script>
 import axios from 'axios';
 export default {
+  data: function() {
+          return {
+            displayRouterViewConst: false          
+            };
+        }, 
+  created: function() {
+      setTimeout(this.setRouterView, 900);
+  },
   methods: {
     isLoggedIn: function() {
       if (localStorage.getItem('jwt')) {
@@ -80,7 +128,10 @@ export default {
     },
     currentUserId: function() {
       return localStorage.getItem('current_user_id');
-    }
+    },
+    setRouterView: function() {
+      this.displayRouterViewConst = true;
+    },
   }
 };
 </script>

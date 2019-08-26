@@ -74,7 +74,7 @@
                 </div><!-- .col-md-12 -->
 
 
-                <div class="col-md-12" v-for="post in posts" :key="post.id">
+                <div class="col-md-12 anmiated fadeIn delay-5s" v-for="post in posts" :key="post.id">
                   <article class="post" v-if="!(post.id == mostHatedPost.id)">
                     <div class="news-container">
                       <span class="news-category"><router-link v-bind:to="'users/' + post.author_id">{{ post.authored_by }}</router-link></span>
@@ -91,7 +91,7 @@
                         </ul>
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
-                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" width="100%" />
+                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" width="100%" style="box-shadow: 5px 5px 5px;" />
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
 
