@@ -130,7 +130,9 @@ export default {
       return localStorage.getItem('current_user_id');
     },
     setRouterView: function() {
+      console.log('hi');
       this.displayRouterViewConst = true;
+      vm.$forceUpdate();
     },
   }
 };

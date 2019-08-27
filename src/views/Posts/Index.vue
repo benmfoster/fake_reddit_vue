@@ -51,25 +51,29 @@
                 <div class="col-md-12">
                   <article class="post">
                     <div class="news-container">
+                      
+                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><span id="hated"><strong>Most Hated </strong></span><span class="news-title">{{ mostHatedPost.title }}</span></router-link>
                       <span class="news-category"><router-link v-bind:to="'users/' + mostHatedPost.author_id">{{ mostHatedPost.authored_by }}</router-link></span>
-                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><h1 class="news-title"><span id="hated">Most Hated:</span><br />{{ mostHatedPost.title }}</h1></router-link>
-                      <span class="news-date">{{ mostHatedPost.date }}</span>
+                      <span class="news-date">{{ relativeDate(mostHatedPost.date) }}</span>
                       <div class="news-entry">
-                        <p>{{ shortener(mostHatedPost.text) }}</p>
-                      </div><!-- .news-entry -->
-                      <div class="news-footer">
-                        
-                          <i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + mostHatedPost.id"> Comments {{ mostHatedPost.comments.length }} </router-link>
-
-                          <span v-if="isLoggedIn()">
-                            <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ mostHatedPost.total_downvotes }}</button>
-                            <button v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" v-on:click="downvote(mostHatedPost)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ mostHatedPost.total_downvotes }}</button>
+                        {{ mostHatedPost.text.substring(0,470) }}
+                        <span style="color:gray;">
+                          {{ mostHatedPost.text.substring(470,479) }}
+                        </span>
+                        <span style="color:silver;">
+                          {{ mostHatedPost.text.substring(479,490) }}
+                        </span>
+                        <span style="color:lightgray;">
+                          {{ mostHatedPost.text.substring(490,500) }}
+                        </span>
+                         <span style="white-space:nowrap;"><span style="font-size:14px;"><i class="fa fa-comments-o"></i><router-link v-bind:to="'posts/' + mostHatedPost.id"> Comments {{ mostHatedPost.comments.length }}</router-link></span>
+                         <span v-if="isLoggedIn()">
+                            <span class="pointer" v-bind:class="{ hide: !(current_user.downvoted_post_ids[mostHatedPost.id] == true) }" v-on:click="removeDownvote(mostHatedPost)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:red;">↓{{ mostHatedPost.total_downvotes }}</span>
+                            <span class="pointer" v-bind:class="{ hide: current_user.downvoted_post_ids[mostHatedPost.id] == true }" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:navy;" v-on:click="downvote(mostHatedPost)">↓{{ mostHatedPost.total_downvotes }}</span>
                           </span>
-                          <span v-else><button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ mostHatedPost.total_downvotes }}</button></span>
-                        
-                      </div><!-- .news-footer -->
+                          <a v-else><span class="pointer" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:navy;">↓{{ mostHatedPost.total_downvotes }}</span></a></span>
+                      </div><!-- .news-entry -->
                     </div><!-- .news-container -->
-                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" />
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
 
@@ -86,12 +90,11 @@
                       <div class="news-footer">
                         <ul>
                           <span><i class="fa fa-comments-o"></i> <router-link v-bind:to="'posts/' + post.id"> Comments {{ post.comments.length }} </router-link></span>
-                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button></span>
-                          <span v-if="!isLoggedIn()"><button style="margin-left: 10px;font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button></span>
+                          <span v-if="isLoggedIn()"><button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">↓ {{ post.total_downvotes }}</button><button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px;font-size:40px; padding: 10px;">↓ {{ post.total_downvotes }}</button></span>
+                          <span v-if="!isLoggedIn()"><button style="margin-left: 10px;font-size:40px; padding: 10px;">↓ {{ post.total_downvotes }}</button></span>
                         </ul>
                       </div><!-- .news-footer -->
                     </div><!-- .news-container -->
-                    <img src="https://www.freewebheaders.com/wp-content/gallery/floral-abstract/textured-floral-abstract-header-4041.jpg" width="100%" style="box-shadow: 5px 5px 5px;" />
                   </article><!-- article -->
                 </div><!-- .col-md-12 -->
 
@@ -122,6 +125,7 @@
 
 <script>
     import axios from 'axios';
+    import moment from 'moment';
 
     export default {
         data: function() {
@@ -168,7 +172,7 @@
               post.total_downvotes++;
             },
             shortener: function(string)	{
-                return string.substring(0,500)+" [...]";
+                return string.substring(0,500);
             },
             mostHated: function(posts) {
               var mostHated = this.posts[0];
@@ -205,6 +209,9 @@
               axios.delete("/api/notifications/" + notificationId).then(response => {
                   console.log("Success!", response.data);
               });
+            },
+            relativeDate: function(date) {
+              return moment(date).fromNow();
             }
         }
 
