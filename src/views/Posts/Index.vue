@@ -52,7 +52,7 @@
                   <article class="post">
                     <div class="news-container">
                       
-                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><span id="hated"><strong>Most Hated </strong></span><span class="news-title">{{ mostHatedPost.title }}</span></router-link>
+                      <router-link v-bind:to="'posts/' + mostHatedPost.id"><span id="hated"><strong>Most Hated </strong></span><span class="news-title">{{ mostHatedPost.title }}<span class="blinky">.</span></span></router-link>
                       <span class="news-category"><router-link v-bind:to="'users/' + mostHatedPost.author_id">{{ mostHatedPost.authored_by }}</router-link></span>
                       <span class="news-date">{{ relativeDate(mostHatedPost.date) }}</span>
                       <div class="news-entry">
@@ -82,7 +82,7 @@
                 <div class="col-md-12" v-for="post in posts" :key="post.id">
                   <article class="post" v-if="!(post.id == mostHatedPost.id)">
                     <div class="news-container">
-                      <h2 class="news-title"><router-link v-bind:to="'posts/' + post.id">{{ post.title }}</router-link></h2>
+                      <h2 class="news-title"><router-link v-bind:to="'posts/' + post.id">{{post.title}}</router-link><span class="blinky">.</span></h2>
                       <span class="news-category"><router-link v-bind:to="'users/' + post.author_id">{{ post.authored_by }}</router-link></span>
                       <span class="news-date">{{ relativeDate(post.date) }}</span>
                       <div class="news-entry">{{post.text.substring(0,470)}}<span style="color:gray;">{{post.text.substring(470,479)}}</span><span style="color:silver;">{{post.text.substring(479,490)}}</span><span style="color:lightgray;">{{post.text.substring(490,500)}}</span>
@@ -117,6 +117,14 @@
          -o-animation: fadein 10s infinite ease-in-out; /* Opera < 12.1 */
             animation: fadein 10s infinite ease-in-out;
 }
+.blinky {
+  display:inline-block;
+  -webkit-animation: blink 8s infinite ease-in-out; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: blink 8s infinite ease-in-out; /* Firefox < 16 */
+        -ms-animation: blink 8s infinite ease-in-out; /* Internet Explorer */
+         -o-animation: blink 8s infinite ease-in-out; /* Opera < 12.1 */
+            animation: blink 8s infinite ease-in-out;
+}
     .hide {
         display: none;
         visibility: hidden;
@@ -131,7 +139,7 @@
     }
 
 
-  @keyframes fadein {
+  @keyframes blink {
       40%, 100% {
     opacity: 1;
   }
@@ -143,7 +151,70 @@
   }
   }
 /* Firefox < 16 */
-@-moz-keyframes fadein {
+@-moz-keyframes blink {
+   40%, 100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes blink {
+   40%, 100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* Internet Explorer */
+@-ms-keyframes blink {
+  40%, 100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* Opera < 12.1 */
+@-o-keyframes blink {
+   40%, 100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+ @keyframes fadein {
+      40%, 100% {
+    opacity: 1;
+  }
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  }
+/* Firefox < 16 */
+@-moz-keyframes blink {
    40%, 100% {
     opacity: 1;
   }
