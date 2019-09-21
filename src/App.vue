@@ -52,7 +52,7 @@
       </div><!-- .container -->
     </nav><!-- .navbar -->
     <router-view class="fadey" :key="$route.path" v-if="displayRouterViewConst"></router-view>
-    <div class="footer" style="background-color:blue;">
+    <div class="footer">
       <div class="container">
         <div class="row">
 
