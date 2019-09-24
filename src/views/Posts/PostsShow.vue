@@ -6,25 +6,30 @@
       <div class="post-entry">
         <div class="container">
           <div class="row">
-
+<div class="news-image">
+                      <img v-bind:src="post.image_url" alt="" />
+                    </div><!-- .news-image -->
             <!-- content-area -->
-            <div class="col-md-8">
+            <div class="col-md-12">
+              
               <article>
                 <div class="news-container">
                   
-                    <h1 class="news-title"><span v-if="isMostHated(post)" id="hated">Most Hated: <br /></span>{{ post.title }}</h1>
-                    <span class="news-date">{{ post.date }}</span>
+                    <h2 class="news-title"><span v-if="isMostHated(post)" id="hated"><strong>Most Hated </strong></span>{{ post.title }}<span class="blinky">.</span></h2>
+                    
+                    <div class="news-author-bio">
+                    <div class="author-avatar">
+                        <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt="" /></router-link>
+                    </div><!-- .author-avatar -->
                     <div class="author-info">
-                        <small>posted by <router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link></small>
-                
-                        
-                      </div><!-- .author-info -->
-                    <div class="news-image">
-                      <img v-bind:src="post.image_url" />
-                    </div><!-- .news-image -->
-                    <div class="news-entry">
-                      <p>{{ post.text }}</p>
-                    </div><!-- .news-entry -->
+                        <h4 class="news-category"><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
+                            <small>posted this <span class="news-date">{{ relativeDate(post.date) }}</span></small></h4>
+                    </div><!-- .author-info -->
+                  </div><!-- .news-author-bio -->
+                    
+                    <div class="news-entry" style="margin-top:5px;">
+                      {{ post.text }}
+                    
                     
 
                     
@@ -33,57 +38,38 @@
                     
 
                  
-                  <div class="news-footer">
-
-                    <div class="row">
-                      <div class="col-md-6">
-                      </div><!-- .col-md-6 -->
-                      <div class="col-md-6">
-                        <div class="news-footer-share">
-
-                            <router-link v-bind:to="post.id">
-                              Comments {{ post.comments.length }}
-                            </router-link>
+                 
+<span class="pointer lil-fade" style="white-space:nowrap;display:inline-block;">
 
                             <span v-if="isLoggedIn()">
 
-                              <button v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-danger">
+                              <span v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:red;">
                                 ↓ {{ post.total_downvotes }}
-                              </button>
+                              </span>
 
-                              <button v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">
-                                ↓ {{ post.total_downvotes }}
-                              </button>
+                              <span v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:red;">
+                                ↓{{ post.total_downvotes }}
+                              </span>
 
                             </span>
 
                             <span v-else>
                               <button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button>
                             </span>
+ </span>
+                            </div><!-- .news-entry -->
     
                               <router-link v-bind:to="post.id + '/edit'">
 
-                                <button class="btn btn-warning" v-if="isLoggedIn() && current_user.name == post.authored_by">
+                                <button style="float:right;" v-if="isLoggedIn() && current_user.name == post.authored_by">
                                   Edit Post
                                 </button>
 
                               </router-link>    
-  
-                        </div>
-                      </div><!-- .col-md-6 -->
-                    </div><!-- .row -->
+ 
+                        
 
-                  </div><!-- .news-footer -->
-
-                  <div class="news-author-bio">
-                    <div class="author-avatar">
-                        <router-link v-bind:to="'../users/' + post.author_id"><img v-bind:src="post.author_image" alt="" /></router-link>
-                    </div><!-- .author-avatar -->
-                    <div class="author-info">
-                        <h4><router-link v-bind:to="'../users/' + post.author_id">{{ post.authored_by }}</router-link>
-                            <small>posted this.</small></h4>
-                    </div><!-- .author-info -->
-                  </div><!-- .news-author-bio -->
+                  
 
                   
 
@@ -199,12 +185,19 @@
   #hated {
       font-family: 'Titillium Web', sans-serif;
       font-size: 20px;
-      font-weight: 200;
-    }   
+    }  
+    .lil-fade {
+  -webkit-animation: fadein 10s infinite ease-in-out; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 10s infinite ease-in-out; /* Firefox < 16 */
+        -ms-animation: fadein 10s infinite ease-in-out; /* Internet Explorer */
+         -o-animation: fadein 10s infinite ease-in-out; /* Opera < 12.1 */
+            animation: fadein 10s infinite ease-in-out;
+    } 
 </style>
         
 <script>
     import axios from "axios";
+    import moment from 'moment';
 
 export default {
   data: function() {
@@ -386,6 +379,9 @@ export default {
       this.taggedUserName = "@" + user.name;
       this.isShowTaggedUsersDropdown = false;
       this.taggedUserId = user.id;
+    },
+    relativeDate: function(date) {
+      return moment(date).fromNow();
     }
   }
 };

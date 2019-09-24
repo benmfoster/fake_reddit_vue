@@ -37,6 +37,13 @@
                 <li><a href="https://github.com/benmfoster/fake_reddit">Backend Repository (Ruby on Rails)</a></li>
               </ul>
             </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More Apps <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="https://bit-better.herokuapp.com">Bit Better (React.js)</a></li>
+                <li><a href="https://singing-glass.herokuapp.com">singing glass (sound installation)</a></li>
+              </ul>
+            </li>
         <li class="cta"><a href="https://benmfoster.github.io">About Me</a></li>
           </ul><!-- .navbar-nav -->
         </div><!-- .navbar-collapse -->
@@ -45,7 +52,7 @@
           
             <h1 class="site-title fadeOut" style="font-weight:normal;font-size:12px;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <br />
-            <p class="site-description animated bounceInUp fadeOut">Misanthropes pile-driving the internet.</p>
+            <p class="site-description animated bounceInUp">Misanthropes pile-driving the internet.</p>
           
 
         </div><!-- .row -->
@@ -77,9 +84,9 @@
   animation-duration: 2s;
 }
 .fadeOut {
-  animation-duration:60s;
+  animation-duration:120s;
 }
-.fadeOut:hover {
+.fadeOut:hover, :active {
   animation:0;
 }
 .bounceInUp {

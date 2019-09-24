@@ -50,7 +50,7 @@
 
                 <div class="col-md-12">
                   <article class="post">
-                    <div class="news-container">
+                    <div class="news-container fadeOut">
                       
                       <router-link v-bind:to="'posts/' + mostHatedPost.id"><span id="hated"><strong>Most Hated </strong></span><span class="news-title">{{ mostHatedPost.title }}<span class="blinky">.</span></span></router-link>
                       <span class="news-category"><router-link v-bind:to="'users/' + mostHatedPost.author_id">{{ mostHatedPost.authored_by }}</router-link></span>
@@ -81,7 +81,7 @@
 
                 <div class="col-md-12" v-for="post in posts" :key="post.id">
                   <article class="post" v-if="!(post.id == mostHatedPost.id)">
-                    <div class="news-container">
+                    <div class="news-container fadeOut">
                       <h2 class="news-title"><router-link v-bind:to="'posts/' + post.id">{{post.title}}</router-link><span class="blinky">.</span></h2>
                       <span class="news-category"><router-link v-bind:to="'users/' + post.author_id">{{ post.authored_by }}</router-link></span>
                       <span class="news-date">{{ relativeDate(post.date) }}</span>
@@ -135,7 +135,12 @@
     #hated {
       font-family: 'Titillium Web', sans-serif;
       font-size: 20px;
-      font-weight: 200;
+    }
+    .fadeOut {
+      animation-duration:60s;
+    }
+    .fadeOut:hover, :active {
+      animation:0;
     }
 
 
