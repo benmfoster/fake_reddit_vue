@@ -7,8 +7,8 @@
       <div class="container">
         <div class="row">
  <!-- navbar -->
-    <nav class="navbar navbar-default">
-      <div class="container">
+    <nav class="navbar navbar-default animated slideInDown">
+      <div class="container" style="margin:0 auto;">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#amalia-navbar-collapse" aria-expanded="false">
@@ -45,21 +45,22 @@
           
             <h1 class="site-title fadey" style="font-weight:normal;font-size:12px;text-decoration:none;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <br />
-            <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
+            <p class="site-description animated bounceInUp">Misanthropes pile-driving the internet.</p>
           
 
         </div><!-- .row -->
       </div><!-- .container -->
     </div><!-- .header -->
    
-    <router-view class="fadey" :key="$route.path" v-if="displayRouterViewConst"></router-view>
+    <router-view :key="$route.path" v-if="displayRouterViewConst"></router-view>
     <div class="footer">
       <div class="container">
         <div class="row">
 
           <div class="col-md-4">
             <a href="#" style="text-decoration:none;">
-            <h3 class="animated zoomInRight">Back to <span>^</span></h3>
+            <h3 style="text-align:center;">Back to<span>^</span></h3>
+            <p style="text-align:center;">If you <i>hate</i> it, <i>downvote</i> it.</p>
             </a>
           </div><!-- .col-md-4 -->
 
