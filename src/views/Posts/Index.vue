@@ -7,7 +7,7 @@
           <div class="row">
 
             <!-- content-area -->
-            <div class="col-md-8 col-md-offset-2">
+            <div style="padding:10px;">
               <div class="row">
 
                 <div v-if="isLoggedIn() && current_user.notifications.length > 0">

@@ -6,16 +6,7 @@
       
       <div class="container">
         <div class="row">
-
-          <div class="col-sm-8">
-            <h1 class="site-title fadey"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
-            <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
-          </div><!-- .col-sm-6 -->
-
-        </div><!-- .row -->
-      </div><!-- .container -->
-    </div><!-- .header -->
-    <!-- navbar -->
+ <!-- navbar -->
     <nav class="navbar navbar-default">
       <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -51,13 +42,25 @@
         </div><!-- .navbar-collapse -->
       </div><!-- .container -->
     </nav><!-- .navbar -->
+          
+            <h1 class="site-title fadey" style="font-weight:normal;font-size:12px;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
+            <br />
+            <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
+          
+
+        </div><!-- .row -->
+      </div><!-- .container -->
+    </div><!-- .header -->
+   
     <router-view class="fadey" :key="$route.path" v-if="displayRouterViewConst"></router-view>
     <div class="footer">
       <div class="container">
         <div class="row">
 
           <div class="col-md-4">
-            <h3 class="animated zoomInRight">Fake Reddit<span>.</span></h3>
+            <a href="#" style="text-decoration:none;">
+            <h3 class="animated zoomInRight">Back to <span>^</span></h3>
+            </a>
           </div><!-- .col-md-4 -->
 
         </div><!-- .row -->
