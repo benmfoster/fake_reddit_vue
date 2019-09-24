@@ -43,7 +43,7 @@
       </div><!-- .container -->
     </nav><!-- .navbar -->
           
-            <h1 class="site-title fadey" style="font-weight:normal;font-size:12px;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
+            <h1 class="site-title fadey" style="font-weight:normal;font-size:12px;text-decoration:none;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <br />
             <p class="site-description animated bounceInUp delay 3-s">Misanthropes pile-driving the internet.</p>
           
