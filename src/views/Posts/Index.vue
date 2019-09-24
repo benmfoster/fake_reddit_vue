@@ -274,10 +274,10 @@
     export default {
         data: function() {
           return {
-            posts: [],
+            posts: 'Loading...',
             users: [],
             current_user: {},
-            mostHatedPost: {},
+            mostHatedPost: 'Loading...',
             sortedNotifications: {}
           };
         },                  
@@ -294,8 +294,7 @@
           axios.get("/api/posts").then(response => {
               this.posts = response.data.reverse();
               this.mostHatedPost = this.mostHated(this.posts);
-          }); 
-          vm.$forceUpdate();      
+          });     
         },
         methods: {
             removeDownvote: function(post) {

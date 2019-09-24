@@ -8,7 +8,7 @@
         <div class="row">
  <!-- navbar -->
     <nav class="navbar navbar-default animated slideInDown">
-      <div class="container" style="margin:0 auto;">
+      <div class="container animated fadeOut" style="margin:0 auto;">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#amalia-navbar-collapse" aria-expanded="false">
@@ -43,25 +43,26 @@
       </div><!-- .container -->
     </nav><!-- .navbar -->
           
-            <h1 class="site-title fadey" style="font-weight:normal;font-size:12px;text-decoration:none;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
+            <h1 class="site-title fadeOut" style="font-weight:normal;font-size:12px;"><router-link to="/">Fake Reddit</router-link><span>.</span></h1>
             <br />
-            <p class="site-description animated bounceInUp">Misanthropes pile-driving the internet.</p>
+            <p class="site-description animated bounceInUp fadeOut">Misanthropes pile-driving the internet.</p>
           
 
         </div><!-- .row -->
       </div><!-- .container -->
     </div><!-- .header -->
    
-    <router-view :key="$route.path" v-if="displayRouterViewConst"></router-view>
-    <div class="footer">
+    <router-view :key="$route.path" class="animated fadeIn"></router-view>
+    <div class="footer animated fadeIn delay-1s">
       <div class="container">
         <div class="row">
 
           <div class="col-md-4">
             <a href="#" style="text-decoration:none;">
             <h3 style="text-align:center;">Back to<span>^</span></h3>
-            <p style="text-align:center;">If you <i>hate</i> it, <i>downvote</i> it.</p>
             </a>
+            <p style="text-align:center;">If you <i>hate</i> it, <i>downvote</i> it.</p>
+            
           </div><!-- .col-md-4 -->
 
         </div><!-- .row -->
@@ -72,56 +73,23 @@
 </template>
 
 <style>
-
-.fadey {
-  -webkit-animation: fadein 0.8s; /* Safari, Chrome and Opera > 12.1 */
-       -moz-animation: fadein 0.8s; /* Firefox < 16 */
-        -ms-animation: fadein 0.8s; /* Internet Explorer */
-         -o-animation: fadein 0.8s; /* Opera < 12.1 */
-            animation: fadein 0.8s;
+.fadeIn {
+  animation-duration: 2s;
 }
-
-  @keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.fadeOut {
+  animation-duration:60s;
 }
-
-/* Firefox < 16 */
-@-moz-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.fadeOut:hover {
+  animation:0;
 }
-
-/* Safari, Chrome and Opera > 12.1 */
-@-webkit-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Internet Explorer */
-@-ms-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-/* Opera < 12.1 */
-@-o-keyframes fadein {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+.bounceInUp {
+  animation-duration: 1.5s;
 }
 </style>
 
 <script>
 import axios from 'axios';
 export default {
-  data: function() {
-          return {
-            displayRouterViewConst: false          
-            };
-        }, 
-  created: function() {
-      setTimeout(this.setRouterView, 900);
-  },
   methods: {
     isLoggedIn: function() {
       if (localStorage.getItem('jwt')) {
@@ -132,12 +100,7 @@ export default {
     },
     currentUserId: function() {
       return localStorage.getItem('current_user_id');
-    },
-    setRouterView: function() {
-      console.log('hi');
-      this.displayRouterViewConst = true;
-      vm.$forceUpdate();
-    },
+    }
   }
 };
 </script>
