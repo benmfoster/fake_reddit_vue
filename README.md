@@ -1,8 +1,8 @@
 # Fake Reddit Vue.js Front End
 
-Dependencies
-  npm install moment --save
-  npm install animate.css --save
+#### Dependencies
+- npm install moment --save
+- npm install animate.css --save
 
 On Fake Reddit, a user can create her own profile, publish posts, and "downvote" other users' posts. Every post she publishes gives her the opportunity to upload an accompanying image, and she can also upload a unique image that will show up on her profile, her posts, and any comments she publishes. To get the conversation going, she can comment on the posts of other users and tag other users in her comments. If another user comments on one of her posts or tags her in a comment, she will receive a notification on her homepage. I made the website's backend using Ruby on Rails and PostgreSQL, and the frontend is built on the Vue.js framework. CSS was implemented using Bootstrap.
 
