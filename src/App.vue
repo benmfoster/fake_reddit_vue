@@ -24,7 +24,7 @@
           <ul class="nav navbar-nav">
             
             <li><router-link to="/">Home</router-link></li>
-            <li><a href="https://lit-escarpment-59964.herokuapp.com/">Fake Reddit Board</a></li>
+            <li><a href="https://fake-reddit-board.herokuapp.com/">Fake Reddit Board</a></li>
         <li v-if="isLoggedIn()"><router-link to='/posts/new'>New Post</router-link></li>
         <li v-if="isLoggedIn()"><router-link v-bind:to="'/users/' + currentUserId()">My Profile</router-link></li>
         <li v-if="isLoggedIn()"><router-link to="/logout">Logout</router-link></li>
