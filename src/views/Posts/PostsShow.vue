@@ -44,17 +44,17 @@
                             <span v-if="isLoggedIn()">
 
                               <span v-bind:class="{ hide: !(current_user.downvoted_post_ids[post.id] == true) }" v-on:click="removeDownvote(post)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:red;">
-                                ↓ {{ post.total_downvotes }}
+                                ↓{{ post.total_downvotes }}
                               </span>
 
-                              <span v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:red;">
+                              <span v-bind:class="{ hide: current_user.downvoted_post_ids[post.id] == true }" v-on:click="downvote(post)" style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:navy;">
                                 ↓{{ post.total_downvotes }}
                               </span>
 
                             </span>
 
                             <span v-else>
-                              <button style="margin-left: 10px; font-size:40px; padding: 10px;" class="btn btn-primary">↓ {{ post.total_downvotes }}</button>
+                              <span style="font-size:25px;font-family: 'VT323', monospace;padding:5px;color:navy;">↓{{ post.total_downvotes }}</span>
                             </span>
  </span>
                             </div><!-- .news-entry -->
